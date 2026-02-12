@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>UQAC Network Analyzer - Statistics Overview</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1773cf",
+              "background-light": "#f6f7f8",
+              "background-dark": "#111921",
+            },
+            fontFamily: {
+              display: ["Space Grotesk", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Space Grotesk", sans-serif;
+      }
+    </style>
+    <style data-stitch-injected>
+      /* For Webkit Browsers (Chrome, Safari, Edge) */
+      body::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* For Firefox */
+      html {
+        scrollbar-width: none;
+      }
+
+      /* For IE/Edge */
+      body {
+        -ms-overflow-style: none;
+        min-height: auto !important;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-200"
+  >
+    <!-- Main Layout Container -->
+    <div class="relative flex min-h-screen w-full flex-col">
+      <!-- Header / Navigation -->
+      <header
+        class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 lg:px-12 py-3"
+      >
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="bg-primary p-1.5 rounded-lg text-white">
+              <span class="material-symbols-outlined text-2xl">hub</span>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight text-primary">
+              UQAC
+              <span class="text-slate-700 dark:text-slate-200"
+                >Network Analyzer</span
+              >
+            </h1>
+          </div>
+          <nav class="hidden md:flex items-center gap-8">
+            <a
+              class="text-sm font-semibold text-slate-500 hover:text-primary transition-colors"
+              href="#"
+              >Dashboard</a
+            >
+            <a
+              class="text-sm font-semibold text-slate-500 hover:text-primary transition-colors"
+              href="#"
+              >Files</a
+            >
+            <a
+              class="text-sm font-semibold text-slate-500 hover:text-primary transition-colors"
+              href="#"
+              >Settings</a
+            >
+          </nav>
+          <div class="flex items-center gap-4">
+            <button
+              class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <div
+              class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-primary overflow-hidden"
+              data-alt="User profile avatar placeholder"
+            >
+              <img
+                alt="User profile"
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBP70NA2fSIt7eBr3PUx_sLxgZX-uwYIIstpsjpzR843d8vus4hxNVTzVM6xjZ6uNrh2TSXz0c_KD-0L5WyGuhBRQIbW-Y9SMyyIag57l3dHMguks_hhG5VyqL_3u1qtNXgHGooNlKEmX9P-MCHWXzi3EWftDp9Rttu6Qv5nIpjr2myL8PUfeEtcUFDPRbtoVw2i1qyXyefZPexUJxXGP0Ir-x9azI4nxG0M7Ptu3xWNBpvPVpnbKTPmyHHPOnAGPDz_HYPz9Wna1D"
+              />
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- Sub-Navigation & Title Area -->
+      <main class="flex-1 w-full max-w-7xl mx-auto px-6 lg:px-12 py-8">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
+        >
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-slate-500 mb-2">
+              <span class="material-symbols-outlined text-sm">description</span>
+              <span class="text-sm font-medium tracking-wide uppercase"
+                >Capture Report</span
+              >
+            </div>
+            <h2
+              class="text-4xl font-bold tracking-tight text-slate-900 dark:text-white"
+            >
+              Network Statistics Overview
+            </h2>
+            <p
+              class="text-slate-500 dark:text-slate-400 flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-base"
+                >insert_drive_file</span
+              >
+              capture_001_enterprise_traffic.pcap
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 transition-colors"
+            >
+              <span class="material-symbols-outlined text-lg">download</span>
+              Export Report
+            </button>
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+            >
+              <span class="material-symbols-outlined text-lg">refresh</span>
+              Re-analyze
+            </button>
+          </div>
+        </div>
+        <!-- View Toggles -->
+        <div
+          class="flex items-center border-b border-slate-200 dark:border-slate-800 mb-8"
+        >
+          <button
+            class="px-6 py-3 border-b-2 border-transparent text-slate-500 font-bold text-sm hover:text-slate-700 dark:hover:text-slate-300"
+          >
+            Graph View
+          </button>
+          <button
+            class="px-6 py-3 border-b-2 border-primary text-primary font-bold text-sm"
+          >
+            Statistics
+          </button>
+        </div>
+        <!-- KPI Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div
+            class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <p class="text-slate-500 dark:text-slate-400 font-medium">
+                Total Packets
+              </p>
+              <span
+                class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded"
+                >inventory_2</span
+              >
+            </div>
+            <p class="text-3xl font-bold tracking-tight">1,284,502</p>
+            <div
+              class="mt-2 text-xs font-semibold text-emerald-500 flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-xs">trending_up</span>
+              12% from previous hour
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <p class="text-slate-500 dark:text-slate-400 font-medium">
+                Data Volume
+              </p>
+              <span
+                class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded"
+                >database</span
+              >
+            </div>
+            <p class="text-3xl font-bold tracking-tight">4.2 GB</p>
+            <div class="mt-2 text-xs font-semibold text-slate-400">
+              Standard usage range
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <p class="text-slate-500 dark:text-slate-400 font-medium">
+                Duration
+              </p>
+              <span
+                class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded"
+                >timer</span
+              >
+            </div>
+            <p class="text-3xl font-bold tracking-tight">00:15:24</p>
+            <div class="mt-2 text-xs font-semibold text-slate-400">
+              Capture window
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <p class="text-slate-500 dark:text-slate-400 font-medium">
+                Avg Throughput
+              </p>
+              <span
+                class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded"
+                >speed</span
+              >
+            </div>
+            <p class="text-3xl font-bold tracking-tight">36.5 Mbps</p>
+            <div
+              class="mt-2 text-xs font-semibold text-rose-500 flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-xs"
+                >trending_down</span
+              >
+              Peak: 142.0 Mbps
+            </div>
+          </div>
+        </div>
+        <!-- Main Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Protocol Distribution (Pie/Donut) -->
+          <div
+            class="lg:col-span-5 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col"
+          >
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-bold">Protocol Distribution</h3>
+              <button
+                class="material-symbols-outlined text-slate-400 hover:text-slate-600"
+              >
+                more_horiz
+              </button>
+            </div>
+            <div
+              class="flex-1 flex items-center justify-center relative min-h-[300px]"
+            >
+              <!-- D3.js Placeholder SVG Chart -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <svg
+                  class="w-64 h-64 transform -rotate-90 drop-shadow-xl"
+                  viewbox="0 0 100 100"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    fill="transparent"
+                    r="40"
+                    stroke="#1773cf"
+                    stroke-dasharray="180 251.2"
+                    stroke-width="12"
+                  ></circle>
+                  <circle
+                    cx="50"
+                    cy="50"
+                    fill="transparent"
+                    r="40"
+                    stroke="#3b82f6"
+                    stroke-dasharray="45 251.2"
+                    stroke-dashoffset="-180"
+                    stroke-width="12"
+                  ></circle>
+                  <circle
+                    cx="50"
+                    cy="50"
+                    fill="transparent"
+                    r="40"
+                    stroke="#93c5fd"
+                    stroke-dasharray="26.2 251.2"
+                    stroke-dashoffset="-225"
+                    stroke-width="12"
+                  ></circle>
+                </svg>
+                <div class="absolute flex flex-col items-center">
+                  <span
+                    class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+                    >TCP Lead</span
+                  >
+                  <span class="text-2xl font-black">72%</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-4">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-primary"></span>
+                <span class="text-sm font-medium">TCP (72%)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                <span class="text-sm font-medium">UDP (18%)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-blue-300"></span>
+                <span class="text-sm font-medium">ICMP (7%)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-slate-200"></span>
+                <span class="text-sm font-medium">Other (3%)</span>
+              </div>
+            </div>
+          </div>
+          <!-- Top Talkers (Bar Chart) -->
+          <div
+            class="lg:col-span-7 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-bold">Top Talkers (IPs)</h3>
+              <div class="flex bg-slate-100 dark:bg-slate-800 rounded-md p-1">
+                <button
+                  class="px-3 py-1 text-xs font-bold bg-white dark:bg-slate-700 rounded shadow-sm"
+                >
+                  By Bytes
+                </button>
+                <button class="px-3 py-1 text-xs font-bold text-slate-500">
+                  By Packets
+                </button>
+              </div>
+            </div>
+            <div class="space-y-6">
+              <!-- Bar 1 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-medium">
+                  <span class="font-mono text-slate-700 dark:text-slate-300"
+                    >192.168.1.104</span
+                  >
+                  <span>1.2 GB</span>
+                </div>
+                <div
+                  class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5"
+                >
+                  <div
+                    class="bg-primary h-2.5 rounded-full"
+                    style="width: 85%"
+                  ></div>
+                </div>
+              </div>
+              <!-- Bar 2 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-medium">
+                  <span class="font-mono text-slate-700 dark:text-slate-300"
+                    >10.0.0.42</span
+                  >
+                  <span>850 MB</span>
+                </div>
+                <div
+                  class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5"
+                >
+                  <div
+                    class="bg-primary h-2.5 rounded-full opacity-80"
+                    style="width: 60%"
+                  ></div>
+                </div>
+              </div>
+              <!-- Bar 3 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-medium">
+                  <span class="font-mono text-slate-700 dark:text-slate-300"
+                    >172.16.254.1</span
+                  >
+                  <span>420 MB</span>
+                </div>
+                <div
+                  class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5"
+                >
+                  <div
+                    class="bg-primary h-2.5 rounded-full opacity-60"
+                    style="width: 35%"
+                  ></div>
+                </div>
+              </div>
+              <!-- Bar 4 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-medium">
+                  <span class="font-mono text-slate-700 dark:text-slate-300"
+                    >192.168.1.1</span
+                  >
+                  <span>210 MB</span>
+                </div>
+                <div
+                  class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5"
+                >
+                  <div
+                    class="bg-primary h-2.5 rounded-full opacity-40"
+                    style="width: 15%"
+                  ></div>
+                </div>
+              </div>
+              <!-- Bar 5 -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-medium">
+                  <span class="font-mono text-slate-700 dark:text-slate-300"
+                    >8.8.8.8</span
+                  >
+                  <span>190 MB</span>
+                </div>
+                <div
+                  class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5"
+                >
+                  <div
+                    class="bg-primary h-2.5 rounded-full opacity-30"
+                    style="width: 12%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <button
+              class="w-full mt-8 py-2 text-sm font-bold text-primary hover:bg-primary/5 rounded-lg border border-dashed border-primary/30 transition-colors"
+            >
+              View All Endpoints
+            </button>
+          </div>
+          <!-- Traffic Over Time (Area Chart) -->
+          <div
+            class="lg:col-span-12 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h3 class="text-lg font-bold">Data Volume Over Time</h3>
+                <p class="text-sm text-slate-500">
+                  Real-time throughput analysis (pps)
+                </p>
+              </div>
+              <div class="flex gap-2">
+                <span
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800"
+                >
+                  Live Tracking
+                </span>
+              </div>
+            </div>
+            <div class="relative h-64 w-full">
+              <!-- Simulated D3 Area Chart Grid Lines -->
+              <div class="absolute inset-0 flex flex-col justify-between">
+                <div
+                  class="border-t border-slate-100 dark:border-slate-800 w-full"
+                ></div>
+                <div
+                  class="border-t border-slate-100 dark:border-slate-800 w-full"
+                ></div>
+                <div
+                  class="border-t border-slate-100 dark:border-slate-800 w-full"
+                ></div>
+                <div
+                  class="border-t border-slate-100 dark:border-slate-800 w-full"
+                ></div>
+              </div>
+              <!-- Area Chart SVG -->
+              <svg
+                class="absolute inset-0 w-full h-full"
+                preserveaspectratio="none"
+              >
+                <defs>
+                  <lineargradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+                    <stop
+                      offset="0%"
+                      stop-color="#1773cf"
+                      stop-opacity="0.2"
+                    ></stop>
+                    <stop
+                      offset="100%"
+                      stop-color="#1773cf"
+                      stop-opacity="0"
+                    ></stop>
+                  </lineargradient>
+                </defs>
+                <path
+                  class="w-full"
+                  d="M0 200 L50 180 L100 220 L150 150 L200 170 L250 100 L300 120 L350 80 L400 110 L450 190 L500 140 L550 160 L600 50 L650 90 L700 70 L750 120 L800 110 L850 130 L900 60 L950 80 L1000 100 L1000 256 L0 256 Z"
+                  fill="url(#areaGradient)"
+                  style="width: 100%"
+                ></path>
+                <path
+                  d="M0 200 L50 180 L100 220 L150 150 L200 170 L250 100 L300 120 L350 80 L400 110 L450 190 L500 140 L550 160 L600 50 L650 90 L700 70 L750 120 L800 110 L850 130 L900 60 L950 80 L1000 100"
+                  fill="none"
+                  stroke="#1773cf"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                ></path>
+              </svg>
+              <!-- Hover Indicator Example -->
+              <div
+                class="absolute left-1/2 top-0 h-full w-px bg-primary opacity-50 flex items-center justify-center"
+              >
+                <div
+                  class="w-3 h-3 bg-primary rounded-full ring-4 ring-primary/20 -translate-y-16"
+                ></div>
+                <div
+                  class="absolute top-0 -translate-y-full bg-slate-800 text-white text-[10px] px-2 py-1 rounded mb-2"
+                >
+                  00:07:42 | 84.2 Mbps
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex justify-between mt-4 text-[11px] font-bold text-slate-400 uppercase tracking-tighter"
+            >
+              <span>00:00:00</span>
+              <span>00:03:00</span>
+              <span>00:06:00</span>
+              <span>00:09:00</span>
+              <span>00:12:00</span>
+              <span>00:15:24</span>
+            </div>
+          </div>
+        </div>
+        <!-- Detailed Table Preview -->
+        <div
+          class="mt-8 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+        >
+          <div
+            class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between"
+          >
+            <h3 class="font-bold text-lg">Packet Stream Preview</h3>
+            <div class="flex gap-2">
+              <div class="relative">
+                <span
+                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"
+                  >search</span
+                >
+                <input
+                  class="pl-9 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64"
+                  placeholder="Filter packets..."
+                  type="text"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 dark:bg-slate-800/50">
+                <tr>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase"
+                  >
+                    No.
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase"
+                  >
+                    Time
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase"
+                  >
+                    Source
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase"
+                  >
+                    Destination
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase"
+                  >
+                    Protocol
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase"
+                  >
+                    Length
+                  </th>
+                  <th
+                    class="px-6 py-4 text-xs font-bold text-slate-500 uppercase"
+                  >
+                    Info
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                <tr
+                  class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
+                >
+                  <td class="px-6 py-4 text-sm font-mono text-slate-500">
+                    1284502
+                  </td>
+                  <td class="px-6 py-4 text-sm">15:24:00.002</td>
+                  <td class="px-6 py-4 text-sm font-mono">192.168.1.104</td>
+                  <td class="px-6 py-4 text-sm font-mono">52.12.34.120</td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-[10px] font-bold uppercase"
+                      >TLSv1.3</span
+                    >
+                  </td>
+                  <td class="px-6 py-4 text-sm">1492</td>
+                  <td
+                    class="px-6 py-4 text-sm text-slate-500 italic truncate max-w-[200px]"
+                  >
+                    Application Data [ACK] Seq=145 Ack=1 Win=64240
+                  </td>
+                </tr>
+                <tr
+                  class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
+                >
+                  <td class="px-6 py-4 text-sm font-mono text-slate-500">
+                    1284501
+                  </td>
+                  <td class="px-6 py-4 text-sm">15:24:00.001</td>
+                  <td class="px-6 py-4 text-sm font-mono">52.12.34.120</td>
+                  <td class="px-6 py-4 text-sm font-mono">192.168.1.104</td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="px-2 py-1 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase"
+                      >TCP</span
+                    >
+                  </td>
+                  <td class="px-6 py-4 text-sm">66</td>
+                  <td class="px-6 py-4 text-sm text-slate-500 italic">
+                    443 → 58242 [ACK] Seq=1 Ack=145 Win=2048
+                  </td>
+                </tr>
+                <tr
+                  class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
+                >
+                  <td class="px-6 py-4 text-sm font-mono text-slate-500">
+                    1284500
+                  </td>
+                  <td class="px-6 py-4 text-sm">15:23:59.998</td>
+                  <td class="px-6 py-4 text-sm font-mono">192.168.1.1</td>
+                  <td class="px-6 py-4 text-sm font-mono">192.168.1.255</td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="px-2 py-1 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-[10px] font-bold uppercase"
+                      >UDP</span
+                    >
+                  </td>
+                  <td class="px-6 py-4 text-sm">242</td>
+                  <td class="px-6 py-4 text-sm text-slate-500 italic">
+                    DHCP Discover - Transaction ID 0x3d21
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="p-4 bg-slate-50 dark:bg-slate-800/30 flex justify-center">
+            <button class="text-sm font-bold text-primary hover:underline">
+              Download full CSV for analysis
+            </button>
+          </div>
+        </div>
+      </main>
+      <!-- Footer Footer -->
+      <footer
+        class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-12 py-6"
+      >
+        <div
+          class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <div class="flex items-center gap-2 opacity-60">
+            <span class="material-symbols-outlined text-lg"
+              >shield_with_heart</span
+            >
+            <p class="text-xs font-medium">
+              UQAC Computer Science Department - Network Security Labs
+            </p>
+          </div>
+          <div class="flex gap-6">
+            <a
+              class="text-xs font-bold text-slate-400 hover:text-primary"
+              href="#"
+              >System Status</a
+            >
+            <a
+              class="text-xs font-bold text-slate-400 hover:text-primary"
+              href="#"
+              >API Documentation</a
+            >
+            <a
+              class="text-xs font-bold text-slate-400 hover:text-primary"
+              href="#"
+              >User Support</a
+            >
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
