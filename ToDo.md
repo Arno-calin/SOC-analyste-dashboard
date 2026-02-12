@@ -25,6 +25,11 @@ stitch :
 - css dans un fichier pour facilement le modifier via ia
 - js pur dans un fichier pour d3
 
+- Manque une maquette
+
+- Une version improved avec une courbe pour chaque protocole
+- problème répétition du code js et html -> factoriser
+
 ## Questions
 
 Est-ce qu'on reste sur du js pur ?
@@ -36,11 +41,8 @@ qu'est-ce qu'on veut comme template ?
 
 python lire pcapng (cf chatgpt)
 scapy
-ajouter une courbe pour voir tous tcp
-et une sans tcp
--> faire un graphique avec ajout couleurs qui se superposent
 
-tester d3.js pour faire plus de trucs
+lire la doc D3.js pour faire des graphiques incroyables
 idem test python pour manipuler les données
 
 créer un fichier requirements.txt pour dépendance python

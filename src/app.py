@@ -15,7 +15,7 @@ def hello(name=None):
 def hello_world():
     return "<p>Hello, World!</p>"
 
-@app.route('/data/')
+@app.route('/data/V1')
 def data(name=None):
     # analyse du csv
     df = pd.read_csv("data/first_data.csv")
@@ -39,3 +39,30 @@ def data(name=None):
     print(data)
 
     return render_template('data.html', rows=data)
+
+@app.route('/data/V2')
+def dataV2(name=None):
+    # analyse du csv
+    df = pd.read_csv("data/first_data.csv")
+    # formatage
+
+    # Convertir Time en float
+    df["Time"] = df["Time"].astype(float)
+
+    # Créer une colonne "date" = seconde entière
+    df["date"] = np.floor(df["Time"]).astype(int)
+
+    print(df.info())
+
+    # Grouper par seconde et compter
+    result = (
+        df.groupby(["date", "Protocol"])
+        .size()
+        .reset_index(name="value")
+    )
+    print(result)
+    data = result.to_dict(orient="records")
+
+    print(data)
+
+    return render_template('dataImproved.html', rows=data)
