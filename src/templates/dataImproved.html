@@ -35,17 +35,13 @@
             <h1>UQAC <span>Network Analyzer</span></h1>
           </div>
           <nav>
-            <a href="#">Dashboard</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
             <a class="active" href="#">Statistics</a>
-            <a href="#">Files</a>
           </nav>
           <div class="user-controls">
-            <button>
-              <span class="material-symbols-outlined">notifications</span>
-            </button>
             <div class="profile-pic">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBP70NA2fSIt7eBr3PUx_sLxgZX-uwYIIstpsjpzR843d8vus4hxNVTzVM6xjZ6uNrh2TSXz0c_KD-0L5WyGuhBRQIbW-Y9SMyyIag57l3dHMguks_hhG5VyqL_3u1qtNXgHGooNlKEmX9P-MCHWXzi3EWftDp9Rttu6Qv5nIpjr2myL8PUfeEtcUFDPRbtoVw2i1qyXyefZPexUJxXGP0Ir-x9azI4nxG0M7Ptu3xWNBpvPVpnbKTPmyHHPOnAGPDz_HYPz9Wna1D"
+                src="https://secure.gravatar.com/avatar/20fbbda8a292f59f2d3461a5b999c00b?s=96&d=mm&r=g"
                 alt="User profile"
               />
             </div>
@@ -55,85 +51,8 @@
 
       <!-- Main -->
       <main>
-        <section class="report-header">
-          <div class="report-info">
-            <div class="report-label">
-              <span class="material-symbols-outlined">assessment</span>
-              Capture Report
-            </div>
-            <h2>Network Statistics Overview</h2>
-            <p>
-              <span class="material-symbols-outlined">file_present</span>
-              capture_001_enterprise_traffic.pcap
-            </p>
-          </div>
-          <div class="report-actions">
-            <button class="export">
-              <span class="material-symbols-outlined">download</span> Export
-              Report
-            </button>
-            <button class="refresh">
-              <span class="material-symbols-outlined">refresh</span> Re-analyze
-            </button>
-          </div>
-        </section>
-
-        <!-- Stats Cards -->
-        <section class="stats-cards">
-          <div class="card">
-            <div class="card-header">
-              <p>Total Packets</p>
-              <span class="material-symbols-outlined">dataset</span>
-            </div>
-            <p class="value">1,284,502</p>
-            <p class="delta">
-              <span class="material-symbols-outlined">trending_up</span> 12%
-              from previous hour
-            </p>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <p>Data Volume</p>
-              <span class="material-symbols-outlined">storage</span>
-            </div>
-            <p class="value">4.2 GB</p>
-            <p class="info">Standard usage range</p>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <p>Duration</p>
-              <span class="material-symbols-outlined">timer</span>
-            </div>
-            <p class="value">00:15:24</p>
-            <p class="info">Capture window</p>
-          </div>
-          <div class="card">
-            <div class="card-header">
-              <p>Avg Throughput</p>
-              <span class="material-symbols-outlined">speed</span>
-            </div>
-            <p class="value">36.5 Mbps</p>
-            <p class="delta">
-              <span class="material-symbols-outlined">trending_up</span> Peak:
-              142.0 Mbps
-            </p>
-          </div>
-        </section>
-
         <!-- Aggregated Request Statistics Table -->
         <section class="table-section">
-          <div class="table-header">
-            <h3>Aggregated Request Statistics</h3>
-            <p>Summary of request frequency categorized by time intervals</p>
-            <div class="table-buttons">
-              <button>
-                <span class="material-symbols-outlined">filter_list</span>
-              </button>
-              <button>
-                <span class="material-symbols-outlined">more_vert</span>
-              </button>
-            </div>
-          </div>
           <div class="overflow-x-auto" id="tab">
             <table class="w-full text-left border-collapse" id="data">
               <thead>
@@ -172,58 +91,6 @@
                 {% endfor %}
               </tbody>
             </table>
-          </div>
-          <div class="table-footer">
-            <button>Load More History</button>
-          </div>
-        </section>
-
-        <!-- Packet Stream Preview Table -->
-        <section class="table-section">
-          <div class="table-header">
-            <h3>Packet Stream Preview</h3>
-            <div class="search-box">
-              <span class="material-symbols-outlined">search</span>
-              <input type="text" placeholder="Filter packets..." />
-            </div>
-          </div>
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Time</th>
-                  <th>Source</th>
-                  <th>Destination</th>
-                  <th>Protocol</th>
-                  <th>Length</th>
-                  <th>Info</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1284502</td>
-                  <td>15:24:00.002</td>
-                  <td>192.168.1.104</td>
-                  <td>52.12.34.120</td>
-                  <td>TLSv1.3</td>
-                  <td>1492</td>
-                  <td>Application Data [ACK] Seq=145 Ack=1 Win=64...</td>
-                </tr>
-                <tr>
-                  <td>1284501</td>
-                  <td>15:24:00.001</td>
-                  <td>52.12.34.120</td>
-                  <td>192.168.1.104</td>
-                  <td>TCP</td>
-                  <td>66</td>
-                  <td>443 → 58242 [ACK] Seq=1 Ack=145 Win=2048</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="table-footer">
-            <button>Download full CSV for analysis</button>
           </div>
         </section>
       </main>

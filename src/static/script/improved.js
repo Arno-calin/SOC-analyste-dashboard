@@ -18,7 +18,7 @@ const width = 500;
 const height = 300;
 const margin = { top: 20, right: 20, bottom: 40, left: 50 };
 
-//  d3.select("table#data").remove();
+d3.select("table#data").remove();
 
 const svg = d3
   .select("div#tab")

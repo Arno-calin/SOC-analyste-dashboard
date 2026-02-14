@@ -6,17 +6,13 @@ import numpy as np
 
 app = Flask(__name__)
 
-@app.route('/hello/')
-@app.route('/hello/<name>')
-def hello(name=None):
+@app.route("/")
+@app.route('/<name>')
+def hello_world(name=None):
     return render_template('hello.html', person=name)
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
-
-@app.route('/data/V1')
-def data(name=None):
+@app.route("/dashboard")
+def dashboard():
     # analyse du csv
     df = pd.read_csv("data/first_data.csv")
     # formatage
@@ -40,8 +36,8 @@ def data(name=None):
 
     return render_template('data.html', rows=data)
 
-@app.route('/data/V2')
-def dataV2(name=None):
+@app.route("/statistiques")
+def stats():
     # analyse du csv
     df = pd.read_csv("data/first_data.csv")
     # formatage

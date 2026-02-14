@@ -20,7 +20,9 @@ Ceci est le début d'un projet étudiant supervisé par un professeur en cybers�
 - flask pour le serveur python et les template html
 - ia générative pour le css
 
-# Installation
+## format des données
+
+## Installation
 
 - créer un environnement python (développer)
 - installer les dépendances de requirements.txt (développer)
