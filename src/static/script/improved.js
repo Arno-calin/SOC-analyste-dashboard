@@ -1,45 +1,55 @@
 const data = [];
-data.push({ date: 7, protocol: "DNS", value: "0" });
-
+const tip = [];
+// Je récupère les données contenues dans le html
 d3.selectAll("#data tbody tr").each(function () {
   const cells = d3.select(this).selectAll("td");
   data.push({
-    date: parseInt(cells.nodes()[0].textContent),
-    protocol: cells.nodes()[1].textContent.trim(),
-    //  date: new Date(cells.nodes()[0].textContent),
-    value: cells.nodes()[2].textContent.trim(),
+    date: parseInt(cells.nodes()[0].textContent), // l'axes des x
+    protocol: cells.nodes()[1].textContent.trim(), // la couleur de la ligne
+    value: cells.nodes()[2].textContent.trim(), // l'axe des y
   });
 });
 
-data.push({ date: 9, protocol: "DNS", value: "0" });
-console.log(data);
+d3.selectAll("#tip tbody tr").each(function () {
+  const cells = d3.select(this).selectAll("td");
+  tip.push({
+    date: parseInt(cells.nodes()[0].textContent), // l'axes des x
+    name: cells.nodes()[1].textContent.trim(), // la couleur de la ligne
+    classification: cells.nodes()[2].textContent.trim(), // l'axe des y
+  });
+});
+// Je supprimer ces données je n'en ai plus besoin
+d3.select("#data").remove();
+d3.select("#tip").remove();
 
-const width = 500;
-const height = 300;
+console.log("Les données ont été chargées : ");
+console.log(data);
+console.log(tip);
+
+// Variable utiles
+const width = 1500;
+const height = 900;
 const margin = { top: 20, right: 20, bottom: 40, left: 50 };
 
-d3.select("table#data").remove();
-
+// On ajoute une balise svg dans la <div id=tab> </div>
 const svg = d3
   .select("div#tab")
   .append("svg")
   .attr("width", width)
   .attr("height", height)
   .attr("viewBox", [0, 0, width, height])
-  .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-/*
-const x = d3.scaleUtc(
-  d3.extent(data, (d) => d.date),
-  [margin.left, width - margin.right]
-);*/
+  .attr("class", "chart");
+
+// attr = défini une propriété de la balise
+
 const x = d3
   .scaleLinear()
   .domain(d3.extent(data, (d) => d.date))
   .range([margin.left, width - margin.right]);
 
 const y = d3.scaleLinear(
-  //[0, d3.max(data, (d) => d.value)],
-  [0, 30],
+  [0, d3.max(data, (d) => d.value)],
+  //[0, 30],
   [height - margin.bottom, margin.top]
 );
 
@@ -68,12 +78,10 @@ svg
   .call((g) =>
     g
       .append("text")
-
       .attr("x", width / 2)
-      .attr("y", 30)
-      .attr("fill", "currentColor")
-      .attr("text-anchor", "start")
-      .text("temps écoulé depuis le début (en s)")
+      .attr("y", 40)
+      .text("temps écoulé depuis le début (en jours)")
+      .attr("class", "axis")
   );
 
 // Add the y-axis, remove the domain line, add grid lines and a label.
@@ -81,21 +89,13 @@ svg
   .append("g")
   .attr("transform", `translate(${margin.left},0)`)
   .call(d3.axisLeft(y).ticks(height / 40))
-  .call((g) => g.select(".domain").remove())
-  .call((g) =>
-    g
-      .selectAll(".tick line")
-      .clone()
-      .attr("x2", width - margin.left - margin.right)
-      .attr("stroke-opacity", 0.1)
-  )
   .call((g) =>
     g
       .append("text")
       .attr("x", -margin.left)
       .attr("y", 10)
-      .attr("fill", "currentColor")
       .attr("text-anchor", "start")
+      .attr("class", "axis")
       .text("Nombre de requêtes")
   );
 
@@ -110,6 +110,7 @@ svg
   .attr("stroke-width", 1.5)
   .attr("d", (d) => line(d[1])); // d[1] = tableau des valeurs
 
+/*
 const legend = svg
   .append("g")
   .attr("transform", `translate(${width - margin.left - 10}, 20)`);
@@ -137,3 +138,24 @@ legendItems
   .attr("dy", "0.35em")
   .text((d) => d)
   .style("font-size", "12px");
+*/
+const t = 5;
+
+tip.forEach((element) => {
+  svg
+    .append("line")
+    .attr("x1", x(element.date))
+    .attr("x2", x(element.date))
+    .attr("y1", y(0)) // bas du graphique
+    .attr("y2", y(100)) // haut du graphique
+    .attr("stroke", "red")
+    .attr("stroke-width", 2)
+    .attr("stroke-dasharray", "4 2"); // optionnel pour un style pointillé
+  svg
+    .append("text")
+    .attr("x", x(element.date)) // même x que la barre
+    .attr("y", y(100)) // légèrement au-dessus de la barre
+    .attr("text-anchor", "middle") // centrer le texte sur la barre
+    .attr("fill", "black")
+    .text(element.classification);
+});

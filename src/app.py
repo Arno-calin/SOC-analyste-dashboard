@@ -11,8 +11,8 @@ app = Flask(__name__)
 def hello_world(name=None):
     return render_template('hello.html', person=name)
 
-@app.route("/dashboard")
-def dashboard():
+@app.route("/statistiques")
+def stats():
     # analyse du csv
     df = pd.read_csv("data/first_data.csv")
     # formatage
@@ -36,12 +36,13 @@ def dashboard():
 
     return render_template('data.html', rows=data)
 
-@app.route("/statistiques")
-def stats():
+@app.route("/dashboard")
+def dashboard():
     # analyse du csv
-    df = pd.read_csv("data/first_data.csv")
+    df = pd.read_csv("data/randomBrutData.csv")
+    tip = pd.read_csv("data/tip_events.csv")
     # formatage
-
+    """
     # Convertir Time en float
     df["Time"] = df["Time"].astype(float)
 
@@ -51,6 +52,7 @@ def stats():
     print(df.info())
 
     # Grouper par seconde et compter
+
     result = (
         df.groupby(["date", "Protocol"])
         .size()
@@ -58,7 +60,11 @@ def stats():
     )
     print(result)
     data = result.to_dict(orient="records")
+    """
+    
+    data = df.to_dict(orient="records")
+    tip = tip.to_dict(orient="records")
 
-    print(data)
 
-    return render_template('dataImproved.html', rows=data)
+    return render_template('dataImproved.html', rows=data, tips=tip)
+

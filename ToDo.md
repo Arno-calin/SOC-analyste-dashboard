@@ -21,6 +21,8 @@ variable pour regarder des trucs : échelle, zoom / dezoom
 
 # Important
 
+ajouter des query dans les routes en fonction du fichier d'entrée : pcap, csv brut, csv cohérent
+
 python lire pcapng (cf chatgpt)
 scapy / pyshark
 
