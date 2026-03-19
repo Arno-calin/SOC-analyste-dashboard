@@ -4,20 +4,48 @@
 
 ## Questions
 
-un outil pour créer la doc comme javadoc ?
-
-- swagger / ce que je veux
+crochetage pour la Lan
 
 ## Notes
 
-génération d'un pcap et csv event
+faire un système de couches : ex.
 
-- sur une année
-- faire un code aléatoirement (lib) pleins de protocoles
-- 200 max par jours, min max par protocoles
-- graphique enrichi par un csv des event importants (écrit à la main)
+- CSS : moderne, épuré
+  - différents styles
+- légende sur la droite
+- filtre à gauche
+- passe sur un événement
+  (- Affiche la date)
+  (- calcul statistiques sur la période (comparaison à la normale))
+  (- calcul par journée mais on pas quoi)
+- ligne en pointillé quand bouge la souris
 
-variable pour regarder des trucs : échelle, zoom / dezoom
+- filtre date : modif graphique
+
+- afficher précision l'événement quand on passe la souris
+
+--- aucune sécurité (on peut totalement faire de l'injection de code)
+
+- changer les dot pour dif perso et default et ajouter légende
+- bouton reset default, suppr perso
+- créer un événement quand on clique sur le graphique
+  1. une barre s'affiche
+  1. ouverture d'une pop up
+  1. Avec un champ name et un champ type
+  1. Si name pas renseigné // dans le code python
+  1. Créer une ligne dans le csv avec date start = end et isDefault false
+  1. Si name déjà dans le csv
+  1. Modifier la line (calculer si nouvelle date c'est start ou end) et isDefault false
+  1. Reload avec la page avec le nouveau csv
+- On peut supprimer et ajouter des événements personnels de manière permanente
+- ajouter une légende pour dif perso de défaut
+- filtre par défaut et personnel
+
+### plus tard
+
+un outil pour créer la doc comme javadoc ?
+
+- swagger / ce que je veux
 
 # Important
 
@@ -43,7 +71,28 @@ faire des bons commits atomiques
 1. Utiliser figma pour créer une maquette
 1. Définir l'ui pour demander à l'ia de générer un css (déjà fait ça marche super bien pour avoir une bonne base mais il faut avoir un agent ia pour maintenir)
 
+- Choisir les courbes que l'on souhaite afficher (edr, ids, total [les trouver dans le pcap])
+  - Case à cocher pour savoir les couches qu'on utilise
+- Ajouter début et fin pour événement si les deux différents mettre une barre au dessus ou en dessous du graphique (au choix de l'utilisateur)
+  - faire deux tableaux différents les html
+- Choisir le type d'événement que l'on souhaite avoir : scolaire (rentrée), récurrent, interne (mise à jour)
+- date picker pour modifier l'intervalle de temps visible + previous select, 1 an, 6 derniers mois
+
+- Aggrandir la lisibilité des axes au détriment des données
+- Faire du feedback, responsive smooth
+
+- permettre de modifier la pelette de couleurs, jouer sur les couleurs pour le contraste
+
+- Semaine pro faire la présentation
+- bouton exporter
+
 ## L2 : analyse des données
+
+    from scapy.all import PcapReader
+
+    with PcapReader("capture.pcap") as pcap:
+        for pkt in pcap:
+            process(pkt)
 
 ## L3 : ajout TIP
 
@@ -64,3 +113,24 @@ ce que pense la personne connait à l'habitude != la réalité dans cette entrep
 créer un script pour du ml et avoir un modèle de prédiction pour un csv chargé
 utiliser read_csv(chunksize=x)
 cf chatgpt pour combiner rust et python
+
+# Librairie à test
+
+Key JavaScript libraries that support layered charting include:
+
+    Layer Cake: This is a headless graphics framework for Svelte that specifically focuses on building visualizations one layer at a time. It synchronizes scales across different HTML, SVG, Canvas, or WebGL components, making it ideal for custom, layered graphics.
+
+    SciChart.js: This library features an "Annotation Layers" API, which allows developers to organize annotations (e.g., text, boxes) into different layers such as Background, BelowChart, and AboveChart to control rendering order and interactivity.
+
+    LightningChart JS: This library supports "layered areas" where individual data series can be stacked using transparency or perspective within the same chart view.
+
+    linked-charts: This library allows multiple plots (layers) of the same or different types (scatter, line, bar) to be put on top of each other, all using the same
+    chart basis and synchronized zooming/panning.
+
+    deck.gl: This library constructs complex geospatial visualizations by composing existing, reusable layers, making it suitable for mapping applications with multiple data overlays.
+
+    Chart.js: While not explicitly a "layer-based" library in the same architectural sense as Layer Cake, it supports mixed chart types (e.g., a line series over a bar series) and layered background colors, achieving a similar visual layering effect.
+
+    D3.js: As a low-level library, D3.js provides the building blocks for creating bespoke data visualizations, where the developer has complete control over layering different SVG elements.
+
+    https://www.highcharts.com/?gad_source=1&gad_campaignid=22994297277&lsgclid=CjwKCAjwyMnNBhBNEiwA-Kcgu7e-6EIZvF9l5K51pxOEBYBonIGhfIObbUXF58-7cSfnguGEOYF-iBoCRhIQAvD_BwE

@@ -2,9 +2,8 @@
 body {
   font-family: "Space Grotesk", sans-serif;
   margin: 0;
-  background-color: #f5f6f8;
+  background-color: #f6f7f8;
   color: #1f2937;
-  line-height: 1.6;
 }
 
 .container {
@@ -15,13 +14,13 @@ body {
 
 /* Header */
 header {
+  position: sticky;
   top: 0;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid #e5e7eb;
-  padding: 16px 32px;
+  padding: 12px 24px;
   z-index: 50;
-  transition: background 0.3s ease;
 }
 
 .header-inner,
@@ -34,7 +33,6 @@ header {
   justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
 }
 
 .logo,
@@ -51,26 +49,19 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 8px;
   color: white;
   background-color: #1b9a58;
-  padding: 4px;
-  transition: transform 0.2s ease;
-}
-
-.logo-icon:hover,
-.footer-logo:hover {
-  transform: scale(1.05);
 }
 
 .logo h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: bold;
   color: #1b9a58;
 }
 
 .logo span {
-  color: #374151;
+  color: #1f2937;
 }
 
 /* Navigation */
@@ -79,10 +70,8 @@ nav a {
   font-weight: 600;
   text-decoration: none;
   color: #6b7280;
-  transition: color 0.2s ease;
 }
 
-nav a:hover,
 nav a.active {
   color: #1b9a58;
 }
@@ -93,8 +82,7 @@ button,
 .table-footer button {
   cursor: pointer;
   border: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
+  font-weight: bold;
 }
 
 .user-controls button {
@@ -104,8 +92,8 @@ button,
 }
 
 .profile-pic img {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid #1b9a58;
   object-fit: cover;
@@ -114,28 +102,29 @@ button,
 /* Main */
 main {
   display: flex;
-  flex-direction: row;
-  gap: 32px;
+  justify-content: space-between;
+  gap: 20px;
   flex: 1;
   padding: 32px 24px;
+  overflow-x: auto;
 }
 
 /* Report Header */
 .report-info {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .report-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: #1b9a58;
-  font-weight: 700;
+  font-weight: bold;
   text-transform: uppercase;
 }
 
 .report-info h2 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   margin: 4px 0;
 }
 
@@ -148,55 +137,44 @@ main {
 
 /* Buttons */
 button {
-  border-radius: 12px;
-  padding: 10px 16px;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  opacity: 0.9;
+  border-radius: 8px;
+  padding: 8px 12px;
 }
 
 button.export {
-  background-color: #ffffff;
+  background-color: white;
   border: 1px solid #e5e7eb;
   color: #374151;
 }
 
 button.refresh {
   background-color: #1b9a58;
-  color: #ffffff;
+  color: white;
 }
 
 /* Stats Cards */
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
   margin-bottom: 32px;
 }
 
 .card {
-  background-color: #ffffff;
+  background-color: white;
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .value {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: bold;
 }
 
 .delta {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: #10b981;
   display: flex;
   align-items: center;
@@ -204,17 +182,18 @@ button.refresh {
 }
 
 .info {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: #6b7280;
 }
 
 /* Tables */
 .table-section {
-  background-color: #ffffff;
+  background-color: white;
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
   margin-bottom: 32px;
   overflow-x: auto;
-  padding: 24px;
+  padding: 20px;
   flex: 0 1 auto;
   min-width: 0;
 }
@@ -235,13 +214,13 @@ thead {
 
 th,
 td {
-  padding: 14px 16px;
+  padding: 12px 16px;
   text-align: left;
   font-size: 0.875rem;
 }
 
 tbody tr:hover {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 
 .table-footer {
@@ -259,51 +238,44 @@ tbody tr:hover {
 /* Search box */
 .search-box {
   position: relative;
-  max-width: 220px;
+  max-width: 200px;
 }
 
 .search-box input {
   width: 100%;
-  padding: 8px 12px 8px 36px;
-  border-radius: 12px;
+  padding: 6px 12px 6px 28px;
+  border-radius: 8px;
   border: 1px solid #e5e7eb;
-  transition: border-color 0.2s ease;
-}
-
-.search-box input:focus {
-  border-color: #1b9a58;
-  outline: none;
 }
 
 .search-box span {
   position: absolute;
-  left: 12px;
+  left: 8px;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af;
+  color: #6b7280;
 }
 
 /* Footer */
 footer {
   background-color: #ffffff;
   border-top: 1px solid #e5e7eb;
-  padding: 40px 24px;
+  padding: 32px 24px;
 }
 
 .footer-logo {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .footer-links a {
   margin-left: 24px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: bold;
   color: #6b7280;
   text-decoration: none;
-  transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
@@ -332,12 +304,13 @@ footer {
   fill: currentColor;
 }
 
-#x-name,
+#x-name {
+  font-size: 2rem;
+  margin-top: auto;
+}
 #y-name {
   font-size: 2rem;
-  font-weight: 600;
 }
-
 #x {
   font-size: 1.25rem;
 }
@@ -347,21 +320,21 @@ footer {
 #legend,
 #legend-event {
   font-size: 1.5rem;
-  transition: transform 0.15s ease;
 }
 #legend:hover,
 #legend-event:hover {
   cursor: grab;
-  transform: scale(1.05);
 }
 
 .filter {
   align-items: center;
-  padding: 14px 18px;
-  border-radius: 12px;
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 10px;
   background: #f5f5f5;
   transition: all 0.2s ease;
   cursor: pointer;
+  height: 100%;
 }
 
 svg {
@@ -370,92 +343,55 @@ svg {
   display: block;
 }
 
-.legend,
-.filter {
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+.legend {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #f0f0f0;
 }
 
 .legend-title {
   font-weight: 600;
   font-size: 14px;
-  color: #374151;
-  margin-bottom: 12px;
+  color: #333;
+  margin-bottom: 10px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 0;
+  padding: 4px 0;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .legend-item:hover {
   transform: translateX(4px);
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 .legend-color {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
   flex-shrink: 0;
 }
 
 .legend-label {
-  font-size: 14px;
+  font-size: 13px;
   color: #555;
 }
 
 .tooltip {
   position: absolute;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  padding: 6px 12px;
-  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  font-size: 13px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-}
-/* Style moderne pour <h1> au début de chaque section */
-section > h1:first-child {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 2rem; /* Grande taille pour titre de section */
-  font-weight: 700; /* Gras pour accentuation */
-  color: #1b9a58; /* Couleur principale du design */
-  margin-bottom: 16px; /* Espace avant le contenu de la section */
-  position: relative;
-  padding-bottom: 8px;
-  line-height: 1.2;
-  text-align: center;
-  letter-spacing: 0.5px;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-/* Accent visuel : ligne sous le titre */
-section > h1:first-child::after {
-  content: "";
-  display: block;
-  width: auto;
-  height: 3px;
-  background-color: #10b981;
-  border-radius: 2px;
-  margin: 8px auto 0; /* centrée sous le texte */
-  transition: width 0.3s ease;
-}
-
-/* Hover / focus effect pour dynamisme */
-section > h1:first-child:hover {
-  color: #15986a;
-  transform: translateY(-2px);
-}
-
-section > h1:first-child:hover::after {
-  width: 64px; /* Ligne s’allonge légèrement au hover */
+  transition: opacity 0.2s;
+  font-size: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
