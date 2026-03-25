@@ -4,8 +4,6 @@
 
 ## Questions
 
-crochetage pour la Lan
-
 Qu'un seul morceau de tout : event interne intéressant les autres moins
 ajouter niveau d'alerte
 
@@ -13,13 +11,11 @@ ajouter niveau d'alerte
 
 (- sécuriser champ libre)
 
-- comme pour événement afficher une tooltip qui affiche la date où se situe le curseur de la souris sur le graphique
 - ajouter id dans csv pour
   - le type serait le nom complet
     - ajouter un champ acronym pour mettre une légend et réduire le chauvement
     - limiter le nombre de caractère et afficher '...' si nécessaire
 - ajouter des titres aux filtres
-- mettre la base du tipL au dessus des tipU pour éviter illisible
 - ajouter colonne csv dont un champ données spécifiques (cf photo teams)
   - Ajouter des menus déroulants pour chaque types qui affiche les catégories contenues dedans (les deux trucs cochables pour afficher ou non)
 - plotly js (ajouter une autre page / autre serv)

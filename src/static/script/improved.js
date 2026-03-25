@@ -239,7 +239,7 @@ const verticalLine = svg
 const unkown = svg
   .append("text")
   .attr("x", x)
-  .attr("y", y)
+  .attr("y", y(d3.max(data, (d) => d.number)) - 5)
   .style("opacity", 0)
   .attr("text-anchor", "middle") // centrer le texte sur la barre
   .text("?");
@@ -256,21 +256,28 @@ svg
   .on("mouseover", () => {
     verticalLine.style("opacity", 1);
     unkown.style("opacity", 1);
+    d3.select("#alert").style("opacity", 1); // ou utiliser d pour contenu dynamique
   })
   .on("mouseout", () => {
     verticalLine.style("opacity", 0);
     unkown.style("opacity", 0);
+    d3.select("#alert").style("opacity", 0);
   })
   .on("mousemove", function (event) {
-    const [x] = d3.pointer(event);
-    if (x < 0 + margin.left) x = 0;
-    else if (x > width - margin.right) x = width - margin.right;
-    verticalLine.attr("x1", x).attr("x2", x);
-    unkown.attr("x", x).attr("y", y);
+    let [xClick] = d3.pointer(event);
+    if (xClick < 0 + margin.left) xClick = 0 + margin.left;
+    else if (xClick > width - margin.right) xClick = width - margin.right;
+    verticalLine.attr("x1", xClick).attr("x2", xClick);
+    unkown.attr("x", xClick);
+    const text = x.invert(xClick).toISOString().slice(0, 10);
+    d3.select("#alert")
+      .style("left", event.pageX + 10 + "px")
+      .style("top", event.pageY + 10 + "px")
+      .html(text);
   })
   .on("click", function (event) {
     let [xClick] = d3.pointer(event);
-
+    d3.select("#alert").style("opacity", 0);
     xClick = Math.max(margin.left, Math.min(width - margin.right, xClick));
     PosX = xClick;
     const [xPop, yPop] = d3.pointer(event);
@@ -362,12 +369,12 @@ tipL.forEach((element) => {
   const index = lastEnd.findIndex((valeur) => valeur < currentStart);
   if (index === -1) {
     lastEnd.push(element.end);
-    countOffset = lastEnd.length - 1;
+    countOffset += lastEnd.length - 1;
   } else {
     lastEnd[index] = element.end;
     countOffset = index;
   }
-  let currentY = yBase - countOffset * lineOffset;
+  let currentY = yBase - (countOffset + 1) * lineOffset;
   svg
     .append("line")
     .classed("tip", true)
@@ -440,7 +447,7 @@ d3.selectAll(".tip-name")
     const obj = tipU.find((d) => d.name === contenu);
     if (obj) {
       const text = obj.name + "<br>" + obj.date.toISOString().slice(0, 10);
-      d3.select(".tooltip").style("opacity", 1).html(text); // ou utiliser d pour contenu dynamique
+      d3.select("#event").style("opacity", 1).html(text); // ou utiliser d pour contenu dynamique
     } else {
       const obj = tipL.find((d) => d.name === contenu);
       const text =
@@ -449,16 +456,16 @@ d3.selectAll(".tip-name")
         obj.start.toISOString().slice(0, 10) +
         " -> " +
         obj.end.toISOString().slice(0, 10);
-      d3.select(".tooltip").style("opacity", 1).html(text); // ou utiliser d pour contenu dynamique
+      d3.select("#event").style("opacity", 1).html(text); // ou utiliser d pour contenu dynamique
     }
   })
   .on("mousemove", function (event) {
-    d3.select(".tooltip")
+    d3.select("#event")
       .style("left", event.pageX + 10 + "px")
       .style("top", event.pageY + 10 + "px");
   })
   .on("mouseout", function () {
-    d3.select(".tooltip").style("opacity", 0);
+    d3.select("#event").style("opacity", 0);
   });
 document.getElementById("startDate").addEventListener("change", () => {
   const start = new Date(document.getElementById("startDate").value);
