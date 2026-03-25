@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Version 1</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='stylesheet/styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <div class="header-inner">
+          <div class="logo">
+            <div class="logo-icon">
+              <span class="material-symbols-outlined">Cybsersécurité</span>
+            </div>
+            <h1>UQAC <span>Stage Projet I</span></h1>
+          </div>
+          <nav>
+            <a class="active" href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('stats') }}">Statistics</a>
+          </nav>
+          <div class="user-controls">
+            <a class="profile-pic" href="https://uqac.ca">
+              <img
+                src="https://secure.gravatar.com/avatar/20fbbda8a292f59f2d3461a5b999c00b?s=96&d=mm&r=g"
+                alt="uqac link"
+              />
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main>
+        <section class="table-section" id="modifier">
+          <h1>Filtre</h1>
+          <div id="date" class="filter">
+            <label for="startDate">Date de début :</label>
+            <input type="date" id="startDate" />
+
+            <label for="endDate">Date de fin :</label>
+            <input type="date" id="endDate" />
+          </div>
+          <div id="check-line" class="filter">
+            {% for alert in alerts %}
+            <label>
+              <input
+                type="checkbox"
+                name="option"
+                value="{{alert}}"
+                checked
+                id="{{alert}}-check"
+              />
+              {{alert}}
+            </label>
+            {% endfor %}
+          </div>
+          <div id="tip-type" class="filter">
+            {% for type in tipsType %}
+            <label>
+              <input
+                type="checkbox"
+                name="option"
+                value="{{type}}"
+                checked
+                id="{{type}}"
+              />
+              {{type}}
+            </label>
+            {% endfor %}
+          </div>
+          <div id="check-legend-default" class="filter">
+            <label>
+              <input
+                id="legend-default"
+                type="checkbox"
+                name="option"
+                value="default"
+                checked
+              />
+              événement par défault
+            </label>
+            <label>
+              <input
+                id="legend-perso"
+                type="checkbox"
+                name="option"
+                value="perso"
+                checked
+              />
+              événement personnel
+            </label>
+            <button id="suppr-perso" type="button">
+              Supprimer événement perso
+            </button>
+          </div>
+        </section>
+
+        <section class="table-section" id="tab">
+          <h1>Évolution du nombre d'alertes en fonction du temps</h1>
+          <table id="data">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Protocole</th>
+                <th>Nombre de requêtes (Request Count)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in rows %}
+              <tr>
+                <td>{{ row.date }}</td>
+                <td>{{ row.alert }}</td>
+                <td>{{ row.number }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <table id="tipUnique">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Nom</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tip in tipsU %}
+              <tr>
+                <td>{{ tip.start }}</td>
+                <td>{{ tip.name }}</td>
+                <td>{{ tip.type }}</td>
+                <td>{{ tip.isDefault }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <table id="tipLongue">
+            <thead>
+              <tr>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Nom</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tip in tipsL %}
+              <tr>
+                <td>{{ tip.start }}</td>
+                <td>{{ tip.end }}</td>
+                <td>{{ tip.name }}</td>
+                <td>{{ tip.type }}</td>
+                <td>{{ tip.isDefault }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
+        <section class="table-section" id="legends"><h1>Légende</h1></section>
+        <div
+          id="popup"
+          style="
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid black;
+            padding: 10px;
+          "
+        >
+          <input type="text" id="userInput" placeholder="Nom de l'événement" />
+          <button id="saveBtn">Enregistrer</button>
+        </div>
+        <div class="tooltip" id="event"></div>
+        <div class="tooltip" id="alert"></div>
+      </main>
+
+      <!-- Footer -->
+      <footer>
+        <div class="footer-inner">
+          <div class="footer-info">
+            <a class="profile-pic" href="https://uqac.ca">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/960px-GitHub_Invertocat_Logo.svg.png"
+                alt="uqac link"
+              />
+            </a>
+            <div>
+              <p>SOC analyste dashboard</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='script/improved.js') }}"
+    ></script>
+  </body>
+</html>
