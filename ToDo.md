@@ -6,40 +6,28 @@
 
 crochetage pour la Lan
 
+Qu'un seul morceau de tout : event interne intéressant les autres moins
+ajouter niveau d'alerte
+
 ## Notes
 
-faire un système de couches : ex.
+(- sécuriser champ libre)
 
-- CSS : moderne, épuré
-  - différents styles
-- légende sur la droite
-- filtre à gauche
-- passe sur un événement
-  (- Affiche la date)
-  (- calcul statistiques sur la période (comparaison à la normale))
-  (- calcul par journée mais on pas quoi)
-- ligne en pointillé quand bouge la souris
-
-- filtre date : modif graphique
-
-- afficher précision l'événement quand on passe la souris
-
---- aucune sécurité (on peut totalement faire de l'injection de code)
-
-- changer les dot pour dif perso et default et ajouter légende
-- bouton reset default, suppr perso
-- créer un événement quand on clique sur le graphique
-  1. une barre s'affiche
-  1. ouverture d'une pop up
-  1. Avec un champ name et un champ type
-  1. Si name pas renseigné // dans le code python
-  1. Créer une ligne dans le csv avec date start = end et isDefault false
-  1. Si name déjà dans le csv
-  1. Modifier la line (calculer si nouvelle date c'est start ou end) et isDefault false
-  1. Reload avec la page avec le nouveau csv
-- On peut supprimer et ajouter des événements personnels de manière permanente
-- ajouter une légende pour dif perso de défaut
-- filtre par défaut et personnel
+- comme pour événement afficher une tooltip qui affiche la date où se situe le curseur de la souris sur le graphique
+- ajouter id dans csv pour
+  - le type serait le nom complet
+    - ajouter un champ acronym pour mettre une légend et réduire le chauvement
+    - limiter le nombre de caractère et afficher '...' si nécessaire
+- ajouter des titres aux filtres
+- mettre la base du tipL au dessus des tipU pour éviter illisible
+- ajouter colonne csv dont un champ données spécifiques (cf photo teams)
+  - Ajouter des menus déroulants pour chaque types qui affiche les catégories contenues dedans (les deux trucs cochables pour afficher ou non)
+- plotly js (ajouter une autre page / autre serv)
+  - csv sur github pour pas passer via un serveur
+    (- se renseigner pour quoi dynamiser données importantes du pcap)
+- confirmation pour bouton suppr
+  (- tag perso pour sa session en cours)
+  (- bouton pour proposer au supérieur ma propotion d'ajout permanent à la db)
 
 ### plus tard
 

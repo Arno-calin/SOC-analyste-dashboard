@@ -459,3 +459,7 @@ section > h1:first-child:hover {
 section > h1:first-child:hover::after {
   width: 64px; /* Ligne s’allonge légèrement au hover */
 }
+
+.tip {
+  font-size: 1.3rem;
+}
