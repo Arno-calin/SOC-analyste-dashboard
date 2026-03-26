@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Version 1</title>
+    <title>Version 2 : vega</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link
       rel="icon"
@@ -184,6 +186,10 @@
         </div>
         <div class="tooltip" id="event"></div>
         <div class="tooltip" id="alert"></div>
+        <div id="vis"></div>
+        <textarea id="editor" rows="15" cols="50"> </textarea>
+
+        <button onclick="updateVis()">Mettre à jour</button>
       </main>
 
       <!-- Footer -->
@@ -207,5 +213,40 @@
       type="module"
       src="{{ url_for('static', filename='script/improved.js') }}"
     ></script>
+    <script>
+      const spec = "{{ url_for('static', filename='specTest.json') }}"; // fichier
+      JSON;
+      vegaEmbed("#vis", spec)
+        .then((result) => console.log("Graphique chargé"))
+        .catch(console.error);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+    <script>
+      fetch(spec)
+        .then((res) => res.json())
+        .then((json) => {
+          document.getElementById("editor").value = JSON.stringify(
+            json,
+            null,
+            2
+          );
+        });
+      function updateVis() {
+        const text = document.getElementById("editor").value;
+
+        try {
+          const spec = JSON.parse(text);
+          vegaEmbed("#vis", spec).then((result) =>
+            console.log("Graphique mis à jour")
+          );
+        } catch (e) {
+          alert("JSON invalide !");
+        }
+      }
+
+      // chargement initial
+    </script>
   </body>
 </html>

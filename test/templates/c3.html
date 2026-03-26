@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exemple C3.js</title>
+    <!-- Inclusion de D3.js -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Inclusion de C3.js -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+    <style>
+      #chart {
+        width: 80%;
+        height: 500px;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Graphique interactif avec C3.js</h2>
+    <div id="chart"></div>
+
+    <script>
+      // Génération du graphique
+      var chart = c3.generate({
+        bindto: "#chart",
+        data: {
+          columns: [
+            ["Série 1", 10, 15, 13, 17, 22],
+            ["Série 2", 16, 5, 11, 9, 15],
+          ],
+          types: {
+            "Série 1": "line",
+            "Série 2": "line",
+          },
+        },
+        axis: {
+          x: {
+            label: "X Axis",
+            tick: {
+              values: [0, 1, 2, 3, 4, 5],
+            },
+          },
+          y: {
+            label: "Y Axis",
+          },
+        },
+        tooltip: {
+          grouped: true, // regroupe les infos des séries au survol
+        },
+        zoom: {
+          enabled: true, // active le zoom et le panoramique
+        },
+      });
+    </script>
+  </body>
+</html>

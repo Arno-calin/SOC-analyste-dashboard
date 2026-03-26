@@ -1,0 +1,112 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 1500,
+  "height": 900,
+  "padding": { "top": 20, "left": 100, "right": 20, "bottom": 80 },
+
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        { "date": "2024-01-01", "alert": "EDR", "number": 10 },
+        { "date": "2024-01-02", "alert": "EDR", "number": 15 },
+        { "date": "2024-01-01", "alert": "IDS", "number": 5 }
+      ],
+      "transform": [
+        { "type": "formula", "expr": "toDate(datum.date)", "as": "date" }
+      ]
+    },
+
+    {
+      "name": "tips",
+      "values": [
+        { "date": "2024-01-02", "name": "Event A", "type": "interne" }
+      ],
+      "transform": [
+        { "type": "formula", "expr": "toDate(datum.date)", "as": "date" }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "x",
+      "type": "utc",
+      "domain": { "data": "table", "field": "date" },
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": { "data": "table", "field": "number" },
+      "nice": true,
+      "range": "height"
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": { "data": "table", "field": "alert" },
+      "range": ["#1f77b4", "#ff7f0e", "#2ca02c"]
+    }
+  ],
+
+  "axes": [
+    { "orient": "bottom", "scale": "x", "title": "temps écoulé" },
+    { "orient": "left", "scale": "y", "title": "Nombre d'alertes" }
+  ],
+
+  "marks": [
+    {
+      "type": "group",
+      "from": {
+        "facet": {
+          "name": "series",
+          "data": "table",
+          "groupby": "alert"
+        }
+      },
+      "marks": [
+        {
+          "type": "line",
+          "from": { "data": "series" },
+          "encode": {
+            "enter": {
+              "x": { "scale": "x", "field": "date" },
+              "y": { "scale": "y", "field": "number" },
+              "stroke": { "scale": "color", "field": "alert" },
+              "strokeWidth": { "value": 2 }
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "type": "rule",
+      "from": { "data": "tips" },
+      "encode": {
+        "enter": {
+          "x": { "scale": "x", "field": "date" },
+          "y": { "value": 0 },
+          "y2": { "signal": "height" },
+          "stroke": { "value": "black" },
+          "strokeDash": { "value": [4, 2] }
+        }
+      }
+    },
+
+    {
+      "type": "text",
+      "from": { "data": "tips" },
+      "encode": {
+        "enter": {
+          "x": { "scale": "x", "field": "date" },
+          "y": { "value": 10 },
+          "text": { "field": "name" },
+          "align": { "value": "center" },
+          "fill": { "value": "red" }
+        }
+      }
+    }
+  ]
+}

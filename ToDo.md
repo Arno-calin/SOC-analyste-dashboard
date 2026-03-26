@@ -115,6 +115,14 @@ Key JavaScript libraries that support layered charting include:
 
     Chart.js: While not explicitly a "layer-based" library in the same architectural sense as Layer Cake, it supports mixed chart types (e.g., a line series over a bar series) and layered background colors, achieving a similar visual layering effect.
 
-    D3.js: As a low-level library, D3.js provides the building blocks for creating bespoke data visualizations, where the developer has complete control over layering different SVG elements.
+D3.js: As a low-level library, D3.js provides the building blocks for creating bespoke data visualizations, where the developer has complete control over layering different SVG elements.
 
-    https://www.highcharts.com/?gad_source=1&gad_campaignid=22994297277&lsgclid=CjwKCAjwyMnNBhBNEiwA-Kcgu7e-6EIZvF9l5K51pxOEBYBonIGhfIObbUXF58-7cSfnguGEOYF-iBoCRhIQAvD_BwE
+C3.js : Une librairie très populaire qui encapsule D3 pour générer des graphiques (courbes, barres, camemberts) avec une configuration simple, agissant comme une couche de simplification.
+
+Plotly.js : Basée sur D3.js et Stack.gl, elle est excellente pour les graphiques scientifiques et interactifs, offrant un haut niveau d'abstraction.
+
+Nivo : Conçue pour React et construite sur D3, elle fournit des composants graphiques prêts à l'emploi avec une grande richesse visuelle.
+
+Vega / Vega-Lite : Ces librairies permettent de définir des visualisations sous forme de spécifications JSON. Vega-Lite est particulièrement puissante pour générer des visualisations D3 complexes de manière déclarative (similaire à une macro). (react-jsonschema-form)
+
+https://www.highcharts.com/?gad_source=1&gad_campaignid=22994297277&lsgclid=CjwKCAjwyMnNBhBNEiwA-Kcgu7e-6EIZvF9l5K51pxOEBYBonIGhfIObbUXF58-7cSfnguGEOYF-iBoCRhIQAvD_BwE
