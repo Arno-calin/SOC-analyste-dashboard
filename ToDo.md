@@ -1,5 +1,8 @@
 # Réunion
 
+on peut faire les pays 
+activités par parfeux
+
 ## État actuel
 
 ## Questions

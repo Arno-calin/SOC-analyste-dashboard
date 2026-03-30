@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html class="dark" lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Vigilant Lens SOC | ATTACK IN PROGRESS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700"
+      rel="stylesheet"
+    />
+
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#ff4d4d" /* Red Alert Theme */,
+              secondary: "#ffa500",
+              tertiary: "#ff3333",
+              surface: "#0f0505",
+              "surface-low": "#1a0a0a",
+              "surface-container": "#240f0f",
+              "on-surface-variant": "#d1b9b9",
+              outline: "#6e5a5a",
+            },
+            fontFamily: { headline: ["Manrope"], body: ["Inter"] },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass-panel {
+        background: rgba(36, 15, 15, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 77, 77, 0.2);
+      }
+      .critical-glow {
+        box-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
+      }
+      .scanline {
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 77, 77, 0.1);
+        position: absolute;
+        animation: scan 4s linear infinite;
+      }
+      @keyframes scan {
+        from {
+          top: 0;
+        }
+        to {
+          top: 100%;
+        }
+      }
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body
+    x-data="socDashboard()"
+    class="bg-surface text-slate-200 font-body overflow-hidden"
+  >
+    <div class="scanline pointer-events-none"></div>
+
+    <header
+      class="fixed top-0 w-full z-50 bg-[#1a0a0a]/90 backdrop-blur-md flex justify-between items-center px-6 h-16 border-b border-primary/30"
+    >
+      <div class="flex items-center gap-8">
+        <span
+          class="text-xl font-black text-primary tracking-widest uppercase font-headline animate-pulse"
+          >Vigilant Lens SOC // EMERGENCY</span
+        >
+        <div
+          class="hidden md:flex items-center gap-2 px-3 py-1 bg-primary/20 rounded border border-primary/40"
+        >
+          <span class="w-2 h-2 bg-primary rounded-full animate-ping"></span>
+          <span class="text-[10px] font-bold text-primary"
+            >STATUS: THREAT LEVEL HIGH</span
+          >
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button
+          @click="triggerAttack()"
+          class="px-4 py-1.5 bg-primary text-white text-xs font-black rounded hover:bg-white hover:text-primary transition-colors"
+        >
+          SIMULATE ATTACK
+        </button>
+        <div
+          class="h-8 w-8 rounded-full border-2 border-primary overflow-hidden"
+        >
+          <img
+            src="https://ui-avatars.com/api/?name=Admin&background=ff4d4d&color=fff"
+            alt="Avatar"
+          />
+        </div>
+      </div>
+    </header>
+
+    <aside
+      class="fixed left-0 top-16 h-[calc(100vh-64px)] w-72 bg-surface-low p-6 space-y-8 z-40 border-r border-primary/10"
+    >
+      <div>
+        <h2
+          class="text-[10px] font-bold text-outline uppercase tracking-widest mb-4"
+        >
+          Focus Zone
+        </h2>
+        <div class="bg-primary/10 p-4 rounded-xl border border-primary/20">
+          <p class="text-xs text-primary font-bold">Warning:</p>
+          <p class="text-[10px] leading-tight mt-1">
+            Unusual outbound traffic detected on Port 443. Potential
+            exfiltration.
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h3
+          class="text-[10px] font-bold text-outline uppercase tracking-widest"
+        >
+          Active Monitors
+        </h3>
+        <template x-for="(val, key) in streams" :key="key">
+          <div
+            class="flex items-center justify-between p-2 rounded-lg"
+            :class="val.active ? 'bg-primary/5' : ''"
+          >
+            <span class="text-sm" x-text="val.label"></span>
+            <button
+              @click="toggleStream(key)"
+              :class="val.active ? 'bg-primary' : 'bg-slate-800'"
+              class="w-8 h-4 rounded-full transition-all relative"
+            >
+              <div
+                :class="val.active ? 'translate-x-4' : 'translate-x-0'"
+                class="w-3 h-3 m-0.5 bg-white rounded-full transition-transform"
+              ></div>
+            </button>
+          </div>
+        </template>
+      </div>
+
+      <div class="mt-auto">
+        <div class="p-4 rounded-xl bg-black/40 border border-white/5">
+          <p class="text-[10px] text-outline uppercase font-bold">
+            Node Health
+          </p>
+          <div class="flex gap-1 mt-2">
+            <template x-for="i in 10">
+              <div
+                class="h-4 w-full rounded-sm"
+                :class="i > 7 ? 'bg-primary animate-pulse' : 'bg-green-900'"
+              ></div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="ml-72 mr-80 pt-24 p-8 min-h-screen">
+      <div class="grid grid-cols-4 gap-4 mb-8">
+        <div
+          class="glass-panel p-4 rounded-2xl critical-glow border-primary/50"
+        >
+          <p class="text-[10px] font-bold text-primary uppercase">
+            Active Incidents
+          </p>
+          <p class="text-3xl font-black mt-1" x-text="incidents"></p>
+        </div>
+        <div class="glass-panel p-4 rounded-2xl">
+          <p class="text-[10px] font-bold text-outline uppercase">
+            Blocked IPs
+          </p>
+          <p class="text-3xl font-black mt-1">14,209</p>
+        </div>
+        <div class="glass-panel p-4 rounded-2xl">
+          <p class="text-[10px] font-bold text-outline uppercase">
+            Success Rate
+          </p>
+          <p
+            class="text-3xl font-black mt-1 text-secondary"
+            x-text="resolutionRate + '%'"
+          ></p>
+        </div>
+        <div class="glass-panel p-4 rounded-2xl">
+          <p class="text-[10px] font-bold text-outline uppercase">
+            DDoS Magnitude
+          </p>
+          <p
+            class="text-3xl font-black mt-1"
+            :class="attackMode ? 'text-primary animate-bounce' : ''"
+          >
+            <span x-text="attackMode ? '4.2' : '0.1'"></span
+            ><span class="text-sm ml-1">Tbps</span>
+          </p>
+        </div>
+      </div>
+
+      <section class="glass-panel rounded-3xl p-6 mb-8 relative">
+        <div
+          class="absolute inset-0 bg-primary/5 pointer-events-none"
+          x-show="attackMode"
+        ></div>
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="font-bold text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined">warning</span>
+            Vecteur d'Attaque (Traffic Spike)
+          </h3>
+          <span class="text-[10px] font-mono text-outline">LATENCY: 450ms</span>
+        </div>
+        <div class="h-[400px]">
+          <canvas id="mainChart"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <aside
+      class="fixed right-0 top-16 h-[calc(100vh-64px)] w-80 bg-surface-low p-6 z-40 border-l border-primary/10 overflow-y-auto"
+    >
+      <h2
+        class="text-[10px] font-bold text-primary uppercase tracking-widest mb-6"
+      >
+        Real-Time Threat Log
+      </h2>
+      <div class="space-y-3">
+        <template x-for="log in logs" :key="log.id">
+          <div
+            class="p-3 bg-black/40 border-l-2 border-primary text-[11px] font-mono"
+          >
+            <div class="flex justify-between text-outline mb-1">
+              <span x-text="log.time"></span>
+              <span x-text="log.origin"></span>
+            </div>
+            <p class="text-primary font-bold" x-text="log.msg"></p>
+          </div>
+        </template>
+      </div>
+    </aside>
+
+    <script>
+      function socDashboard() {
+        return {
+          incidents: 42,
+          resolutionRate: 64.8,
+          attackMode: false,
+          chart: null,
+          streams: {
+            inbound: { label: "Inbound Attack", active: true },
+            outbound: { label: "Outbound Leak", active: true },
+          },
+          logs: [
+            {
+              id: 1,
+              time: "13:40:02",
+              origin: "192.168.1.104",
+              msg: "Multiple failed SSH logins",
+            },
+            {
+              id: 2,
+              time: "13:40:05",
+              origin: "HK-GATEWAY",
+              msg: "Unusual traffic volume detected",
+            },
+            {
+              id: 3,
+              time: "13:40:08",
+              origin: "UNKNOWN",
+              msg: "Ransomware payload signature identified",
+            },
+          ],
+
+          init() {
+            this.initChart();
+            setInterval(() => {
+              if (this.attackMode) {
+                this.incidents++;
+                this.resolutionRate = (this.resolutionRate - 0.1).toFixed(1);
+                this.addLog();
+                this.updateChart();
+              }
+            }, 2000);
+          },
+
+          initChart() {
+            const ctx = document.getElementById("mainChart").getContext("2d");
+            this.chart = new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: ["T-60", "T-45", "T-30", "T-15", "T-5", "NOW"],
+                datasets: [
+                  {
+                    label: "Threat Intensity",
+                    borderColor: "#ff4d4d",
+                    backgroundColor: "rgba(255, 77, 77, 0.2)",
+                    data: [10, 15, 80, 120, 450, 900],
+                    fill: true,
+                    tension: 0.1,
+                    pointRadius: 5,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    grid: { color: "rgba(255, 77, 77, 0.1)" },
+                  },
+                  x: { grid: { display: false } },
+                },
+                plugins: { legend: { display: false } },
+              },
+            });
+          },
+
+          triggerAttack() {
+            this.attackMode = !this.attackMode;
+            if (this.attackMode) {
+              this.incidents = 150;
+              this.resolutionRate = 42.1;
+            }
+          },
+
+          updateChart() {
+            this.chart.data.datasets[0].data.shift();
+            this.chart.data.datasets[0].data.push(
+              Math.floor(Math.random() * 500) + 500
+            );
+            this.chart.update();
+          },
+
+          addLog() {
+            const origins = ["RU-PROXY", "CN-NODE", "AWS-INSTANCE", "TOR-EXIT"];
+            const msgs = [
+              "Buffer Overflow Attempt",
+              "SQL Injection detected",
+              "Unauthorized API Access",
+              "Rootkit upload blocked",
+            ];
+            this.logs.unshift({
+              id: Date.now(),
+              time: new Date().toLocaleTimeString(),
+              origin: origins[Math.floor(Math.random() * origins.length)],
+              msg: msgs[Math.floor(Math.random() * msgs.length)],
+            });
+            if (this.logs.length > 10) this.logs.pop();
+          },
+
+          toggleStream(key) {
+            this.streams[key].active = !this.streams[key].active;
+          },
+        };
+      }
+    </script>
+  </body>
+</html>

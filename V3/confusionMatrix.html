@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SOC Analyzer - Security Operations Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              outline: "#747686",
+              "on-surface-variant": "#434655",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#ffb4ab",
+              background: "#f7f9fb",
+              "on-tertiary-fixed-variant": "#93000b",
+              "on-tertiary": "#ffffff",
+              primary: "#0037b0",
+              "surface-variant": "#e0e3e5",
+              "inverse-on-surface": "#eff1f3",
+              "on-error": "#ffffff",
+              "primary-fixed": "#dce1ff",
+              "surface-tint": "#2151da",
+              "on-primary-fixed-variant": "#0039b5",
+              error: "#ba1a1a",
+              "inverse-surface": "#2d3133",
+              tertiary: "#8f000b",
+              "on-tertiary-fixed": "#410002",
+              "on-error-container": "#93000a",
+              surface: "#f7f9fb",
+              "on-secondary": "#ffffff",
+              "on-primary-container": "#cad3ff",
+              "on-primary-fixed": "#001551",
+              "error-container": "#ffdad6",
+              "surface-container-high": "#e6e8ea",
+              "on-secondary-container": "#571a00",
+              "on-secondary-fixed": "#370e00",
+              "on-surface": "#191c1e",
+              "surface-container": "#eceef0",
+              "on-background": "#191c1e",
+              "tertiary-container": "#bb0112",
+              "primary-fixed-dim": "#b7c4ff",
+              "surface-container-highest": "#e0e3e5",
+              "secondary-fixed": "#ffdbce",
+              secondary: "#a73a00",
+              "on-secondary-fixed-variant": "#7f2b00",
+              "surface-dim": "#d8dadc",
+              "outline-variant": "#c4c5d7",
+              "tertiary-fixed": "#ffdad6",
+              "surface-container-low": "#f2f4f6",
+              "primary-container": "#1d4ed8",
+              "inverse-primary": "#b7c4ff",
+              "secondary-fixed-dim": "#ffb599",
+              "surface-container-lowest": "#ffffff",
+              "surface-bright": "#f7f9fb",
+              "on-tertiary-container": "#ffc7c1",
+              "secondary-container": "#fd651e",
+            },
+            fontFamily: {
+              headline: ["Manrope"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(196, 197, 215, 0.15);
+      }
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+    </style>
+  </head>
+  <body class="bg-surface text-on-surface antialiased">
+    <!-- Top Navigation -->
+    <header
+      class="w-full sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm shadow-primary/5 font-manrope antialiased tracking-tight"
+    >
+      <div class="flex items-center justify-between px-6 h-16 w-full mx-auto">
+        <div class="flex items-center gap-8">
+          <span class="text-xl font-bold tracking-tighter text-primary"
+            >SOC Analyzer</span
+          >
+          <nav class="hidden md:flex items-center gap-6">
+            <a
+              class="text-primary font-bold border-b-2 border-primary pb-1"
+              href="#"
+              >Dashboard</a
+            >
+            <a
+              class="text-on-surface-variant font-medium hover:text-primary transition-colors"
+              href="#"
+              >Incidents</a
+            >
+            <a
+              class="text-on-surface-variant font-medium hover:text-primary transition-colors"
+              href="#"
+              >Threat Hunting</a
+            >
+            <a
+              class="text-on-surface-variant font-medium hover:text-primary transition-colors"
+              href="#"
+              >Analytics</a
+            >
+          </nav>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2 mr-4">
+            <button
+              class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-all"
+            >
+              notifications
+            </button>
+            <button
+              class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-all"
+            >
+              settings
+            </button>
+            <button
+              class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-all"
+            >
+              help_outline
+            </button>
+          </div>
+          <button
+            class="bg-primary text-on-primary px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 active:scale-95 transition-all"
+          >
+            Deploy Agent
+          </button>
+          <div
+            class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30"
+          >
+            <img
+              alt="User profile"
+              data-alt="professional headshot of a security analyst in a clean modern office environment with soft natural lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBLMcYxdLkB47yRi-bD6Vj1SNjyxU5NMMvaSIWUYWgXnVMcpZjsupddS7LP-rk2aVpSayFZ9RiJmpeC2aEnn-sQa0y-Vqtg4pQXYpMmiExjChvy60VRnKcqu-IEl-J90yWYwChVQ7IooiS5_bxOL1plIA7Y4R4NO3AkIGzmeX8SRmNh3T9S3P7S8pm6ZNuEsmuYCBtJuVxpjBx7l38nnm3eBOgv2gEzGlwv0Ins4_tEtxM3x4sggJyUEyI_wkA93Ju3sRw_USO19eK"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="bg-slate-100/50 h-[1px] w-full"></div>
+    </header>
+    <div class="flex min-h-[calc(100vh-64px)]">
+      <!-- Sidebar Filters -->
+      <aside
+        class="w-72 bg-surface-container-low/50 border-r border-outline-variant/10 p-6 flex flex-col gap-8"
+      >
+        <section>
+          <h3
+            class="text-label-md font-bold uppercase tracking-widest text-on-surface-variant mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-sm"
+              >calendar_today</span
+            >
+            Date Range
+          </h3>
+          <div class="space-y-2">
+            <div
+              class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant/20 flex items-center justify-between cursor-pointer"
+            >
+              <span class="text-sm font-medium">Last 24 Hours</span>
+              <span class="material-symbols-outlined text-sm">expand_more</span>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h3
+            class="text-label-md font-bold uppercase tracking-widest text-on-surface-variant mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-sm">source</span> Alert
+            Source
+          </h3>
+          <div class="space-y-1">
+            <label
+              class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer group"
+            >
+              <input
+                checked=""
+                class="rounded border-outline-variant text-primary focus:ring-primary"
+                type="checkbox"
+              />
+              <span class="text-sm font-medium">Total</span>
+              <span
+                class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant"
+                >2.4k</span
+              >
+            </label>
+            <label
+              class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer group"
+            >
+              <input
+                checked=""
+                class="rounded border-outline-variant text-primary focus:ring-primary"
+                type="checkbox"
+              />
+              <span class="text-sm font-medium">EDR</span>
+              <span
+                class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-surface-container-highest text-primary"
+                >1.1k</span
+              >
+            </label>
+            <label
+              class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer group"
+            >
+              <input
+                checked=""
+                class="rounded border-outline-variant text-primary focus:ring-primary"
+                type="checkbox"
+              />
+              <span class="text-sm font-medium">IDS</span>
+              <span
+                class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary"
+                >842</span
+              >
+            </label>
+            <label
+              class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer group"
+            >
+              <input
+                checked=""
+                class="rounded border-outline-variant text-primary focus:ring-primary"
+                type="checkbox"
+              />
+              <span class="text-sm font-medium">SIEM</span>
+              <span
+                class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant"
+                >412</span
+              >
+            </label>
+          </div>
+        </section>
+        <section>
+          <h3
+            class="text-label-md font-bold uppercase tracking-widest text-on-surface-variant mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-sm">priority_high</span>
+            Severity Level
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            <button
+              class="px-3 py-1 rounded-full text-xs font-bold bg-tertiary text-on-tertiary"
+            >
+              Critical
+            </button>
+            <button
+              class="px-3 py-1 rounded-full text-xs font-bold bg-secondary text-on-secondary"
+            >
+              High
+            </button>
+            <button
+              class="px-3 py-1 rounded-full text-xs font-bold bg-surface-container-highest text-on-surface-variant"
+            >
+              Medium
+            </button>
+            <button
+              class="px-3 py-1 rounded-full text-xs font-bold bg-surface-container-highest text-on-surface-variant"
+            >
+              Low
+            </button>
+          </div>
+        </section>
+        <div class="mt-auto p-4 bg-primary/5 rounded-2xl">
+          <p class="text-xs text-primary font-semibold mb-2">Live Status</p>
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span class="text-xs font-medium text-on-surface"
+              >SOC Systems Operational</span
+            >
+          </div>
+        </div>
+      </aside>
+      <!-- Main Content Area -->
+      <main class="flex-1 p-8 overflow-y-auto">
+        <header class="flex justify-between items-end mb-8">
+          <div>
+            <h1
+              class="text-3xl font-extrabold tracking-tight text-on-surface mb-1"
+            >
+              Threat Intelligence Overview
+            </h1>
+            <p class="text-on-surface-variant">
+              Real-time analysis of cross-platform security telemetry.
+            </p>
+          </div>
+          <div class="flex bg-surface-container-high rounded-xl p-1">
+            <button
+              class="px-4 py-2 rounded-lg text-sm font-bold bg-white shadow-sm transition-all"
+            >
+              Absolute
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg text-sm font-bold text-on-surface-variant hover:text-on-surface transition-all"
+            >
+              Percentage
+            </button>
+          </div>
+        </header>
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="glass-card p-6 rounded-2xl">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-on-surface-variant font-bold text-sm"
+                >Total Alerts</span
+              >
+              <span class="material-symbols-outlined text-primary"
+                >analytics</span
+              >
+            </div>
+            <div class="flex items-end gap-3">
+              <span class="text-4xl font-extrabold">2,481</span>
+              <span
+                class="text-green-600 text-sm font-bold mb-1 flex items-center"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >arrow_upward</span
+                >
+                12%
+              </span>
+            </div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-on-surface-variant font-bold text-sm"
+                >% TP Rate</span
+              >
+              <span class="material-symbols-outlined text-green-600"
+                >verified_user</span
+              >
+            </div>
+            <div class="flex items-end gap-3">
+              <span class="text-4xl font-extrabold"
+                >68.4<span class="text-xl">%</span></span
+              >
+              <span
+                class="text-green-600 text-sm font-bold mb-1 flex items-center"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >arrow_upward</span
+                >
+                4.2%
+              </span>
+            </div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-on-surface-variant font-bold text-sm"
+                >% FP Rate</span
+              >
+              <span class="material-symbols-outlined text-error">report</span>
+            </div>
+            <div class="flex items-end gap-3">
+              <span class="text-4xl font-extrabold"
+                >21.8<span class="text-xl">%</span></span
+              >
+              <span class="text-error text-sm font-bold mb-1 flex items-center">
+                <span class="material-symbols-outlined text-sm">warning</span>
+                +8%
+              </span>
+            </div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-on-surface-variant font-bold text-sm"
+                >Accuracy</span
+              >
+              <span class="material-symbols-outlined text-secondary"
+                >target</span
+              >
+            </div>
+            <div class="flex items-end gap-3">
+              <span class="text-4xl font-extrabold"
+                >92.1<span class="text-xl">%</span></span
+              >
+              <span
+                class="text-on-surface-variant text-sm font-bold mb-1 flex items-center"
+              >
+                Stable
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- Main Visualizations Grid -->
+        <div class="grid grid-cols-12 gap-8 mb-8">
+          <!-- Stacked Area Chart Section -->
+          <div class="col-span-12 lg:col-span-8 glass-card rounded-3xl p-8">
+            <div class="flex justify-between items-center mb-10">
+              <div>
+                <h2 class="text-xl font-bold tracking-tight">
+                  Detection Performance Evolution
+                </h2>
+                <p class="text-sm text-on-surface-variant">
+                  Daily breakdown of classification accuracy
+                </p>
+              </div>
+              <div class="flex gap-4">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span class="text-xs font-bold text-on-surface-variant"
+                    >TP</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-error"></div>
+                  <span class="text-xs font-bold text-on-surface-variant"
+                    >FP</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-secondary"></div>
+                  <span class="text-xs font-bold text-on-surface-variant"
+                    >FN</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-primary-fixed"></div>
+                  <span class="text-xs font-bold text-on-surface-variant"
+                    >TN</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- Mock Visualization -->
+            <div class="relative h-[400px] w-full mt-4 flex items-end gap-1">
+              <!-- FP Spike Indicator -->
+              <div
+                class="absolute top-0 right-[25%] bg-error/10 border border-error/20 rounded-lg p-2 text-center"
+              >
+                <span class="text-[10px] font-black text-error uppercase"
+                  >Anomaly Detected</span
+                >
+                <p class="text-xs font-bold">FP Spike +32%</p>
+              </div>
+              <div
+                class="flex-1 bg-gradient-to-t from-primary-fixed to-primary/20 h-full rounded-t-lg opacity-80 relative overflow-hidden"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-green-500/40 via-transparent to-transparent h-[60%] bottom-0"
+                ></div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-error/40 via-transparent to-transparent h-[30%] bottom-[40%]"
+                ></div>
+              </div>
+              <div
+                class="flex-1 bg-gradient-to-t from-primary-fixed to-primary/20 h-[85%] rounded-t-lg opacity-80 relative overflow-hidden"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-green-500/40 via-transparent to-transparent h-[55%] bottom-0"
+                ></div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-error/40 via-transparent to-transparent h-[25%] bottom-[35%]"
+                ></div>
+              </div>
+              <div
+                class="flex-1 bg-gradient-to-t from-primary-fixed to-primary/20 h-[95%] rounded-t-lg opacity-80 relative overflow-hidden"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-green-500/40 via-transparent to-transparent h-[50%] bottom-0"
+                ></div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-error/40 via-transparent to-transparent h-[20%] bottom-[30%]"
+                ></div>
+              </div>
+              <div
+                class="flex-1 bg-gradient-to-t from-primary-fixed to-primary/20 h-[70%] rounded-t-lg opacity-80 relative overflow-hidden border-x-4 border-error/30"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-green-500/40 via-transparent to-transparent h-[20%] bottom-0"
+                ></div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-error/60 via-transparent to-transparent h-[60%] bottom-[10%]"
+                ></div>
+              </div>
+              <div
+                class="flex-1 bg-gradient-to-t from-primary-fixed to-primary/20 h-[90%] rounded-t-lg opacity-80 relative overflow-hidden"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-green-500/40 via-transparent to-transparent h-[70%] bottom-0"
+                ></div>
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-error/40 via-transparent to-transparent h-[15%] bottom-[45%]"
+                ></div>
+              </div>
+            </div>
+            <div class="flex justify-between mt-4 px-2">
+              <span class="text-xs font-bold text-on-surface-variant/60"
+                >08:00</span
+              >
+              <span class="text-xs font-bold text-on-surface-variant/60"
+                >12:00</span
+              >
+              <span class="text-xs font-bold text-on-surface-variant/60"
+                >16:00</span
+              >
+              <span class="text-xs font-bold text-on-surface-variant/60"
+                >20:00</span
+              >
+              <span class="text-xs font-bold text-on-surface-variant/60"
+                >00:00</span
+              >
+            </div>
+          </div>
+          <!-- Confusion Matrix -->
+          <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+            <div class="glass-card rounded-3xl p-6 flex-1">
+              <h2 class="text-lg font-bold mb-6">Confusion Matrix</h2>
+              <div class="grid grid-cols-2 gap-4 h-full pb-8">
+                <div
+                  class="bg-green-50 rounded-2xl border border-green-200/50 p-4 flex flex-col justify-between"
+                >
+                  <span class="text-[10px] font-black text-green-700 uppercase"
+                    >True Positive</span
+                  >
+                  <div class="text-center">
+                    <span class="text-3xl font-bold text-green-700">1,402</span>
+                    <p class="text-xs text-green-600/70">Correct Detections</p>
+                  </div>
+                </div>
+                <div
+                  class="bg-error/5 rounded-2xl border border-error/10 p-4 flex flex-col justify-between"
+                >
+                  <span class="text-[10px] font-black text-error uppercase"
+                    >False Positive</span
+                  >
+                  <div class="text-center">
+                    <span class="text-3xl font-bold text-error">521</span>
+                    <p class="text-xs text-error/70">False Alarms</p>
+                  </div>
+                </div>
+                <div
+                  class="bg-secondary/5 rounded-2xl border border-secondary/10 p-4 flex flex-col justify-between"
+                >
+                  <span class="text-[10px] font-black text-secondary uppercase"
+                    >False Negative</span
+                  >
+                  <div class="text-center">
+                    <span class="text-3xl font-bold text-secondary">82</span>
+                    <p class="text-xs text-secondary/70">Missed Threats</p>
+                  </div>
+                </div>
+                <div
+                  class="bg-surface-container-high rounded-2xl p-4 flex flex-col justify-between"
+                >
+                  <span
+                    class="text-[10px] font-black text-on-surface-variant uppercase"
+                    >True Negative</span
+                  >
+                  <div class="text-center">
+                    <span class="text-3xl font-bold text-on-surface-variant"
+                      >12.4k</span
+                    >
+                    <p class="text-xs text-on-surface-variant/70">
+                      Filtered Clean
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom Row: Performance by Source -->
+        <div class="grid grid-cols-12 gap-8">
+          <div class="col-span-12 lg:col-span-7 glass-card rounded-3xl p-8">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-xl font-bold tracking-tight">
+                Detection Performance by Source
+              </h2>
+              <button
+                class="text-sm font-bold text-primary flex items-center gap-1"
+              >
+                View Full Report
+                <span class="material-symbols-outlined text-sm"
+                  >open_in_new</span
+                >
+              </button>
+            </div>
+            <div class="space-y-6">
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-bold">
+                  <span>EDR (SentinelOne)</span>
+                  <span class="text-primary">94% Efficiency</span>
+                </div>
+                <div
+                  class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden"
+                >
+                  <div
+                    class="h-full bg-primary rounded-full"
+                    style="width: 94%"
+                  ></div>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-bold">
+                  <span>IDS (Corelight)</span>
+                  <span class="text-secondary">78% Efficiency</span>
+                </div>
+                <div
+                  class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden"
+                >
+                  <div
+                    class="h-full bg-secondary rounded-full"
+                    style="width: 78%"
+                  ></div>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm font-bold">
+                  <span>Cloud (AWS GuardDuty)</span>
+                  <span class="text-green-600">88% Efficiency</span>
+                </div>
+                <div
+                  class="h-3 w-full bg-surface-container-high rounded-full overflow-hidden"
+                >
+                  <div
+                    class="h-full bg-green-500 rounded-full"
+                    style="width: 88%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-span-12 lg:col-span-5 glass-card rounded-3xl p-8 relative overflow-hidden group"
+          >
+            <img
+              alt="cybersecurity abstract"
+              class="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:scale-105 transition-transform duration-700"
+              data-alt="abstract close-up of a high-tech computer circuit board with glowing blue and green data pathways and fiber optic light effects"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUYDClHeolt19gPkCWFk2SdGxprTG6hWBFxdpgrjZ3ttQsZPc_i2X56HvqY2X-ez8_JhMWBXHyGxdu-mc1MGzVAJgkDAQh27jVskyf2JpodppCUr-XCLUx_xl8Uq0D0N8zSNtgaN-5uu6eEdfdqJCmJZPVXWxwZTE2WIvYnJkqYlqX3LEanltv0nCrIMAxSVxkJs944dLrm9qYO7FXKM96AOR5yZy4xn6o1ZEgVQuknu6uQZ5-xA12EPzCcFhQUbzspquUS6OV3uej"
+            />
+            <div class="relative z-10">
+              <h2 class="text-xl font-bold mb-2">Automated Threat Triage</h2>
+              <p class="text-on-surface-variant text-sm mb-6">
+                AI-driven analysis has resolved 142 false positives in the last
+                hour.
+              </p>
+              <div class="flex flex-col gap-3">
+                <div
+                  class="flex items-center gap-4 bg-white/60 p-3 rounded-xl border border-outline-variant/10"
+                >
+                  <div
+                    class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center"
+                  >
+                    <span class="material-symbols-outlined text-primary"
+                      >psychology</span
+                    >
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold">Pattern Matching Active</p>
+                    <p class="text-xs text-on-surface-variant">
+                      Identifying lateral movement...
+                    </p>
+                  </div>
+                </div>
+                <button
+                  class="w-full mt-4 bg-primary-container text-on-primary-container font-bold py-3 rounded-xl active:scale-95 transition-all"
+                >
+                  Review AI Predictions
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script>
+      /**
+       * SOC Analyzer - Interactivity Module
+       * Logic for dynamic updates, filtering, and data visualization
+       */
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Data State ---
+        const state = {
+          viewMode: "absolute", // 'absolute' or 'percentage'
+          activeFilters: ["EDR", "IDS", "SIEM"],
+          activeSeverities: ["Critical", "High", "Medium", "Low"],
+          // Mock data representing different sources
+          sourceData: {
+            EDR: { alerts: 1100, tp: 800, fp: 250, fn: 50, efficiency: 94 },
+            IDS: { alerts: 842, tp: 500, fp: 300, fn: 42, efficiency: 78 },
+            SIEM: { alerts: 412, tp: 102, fp: 300, fn: 10, efficiency: 65 },
+          },
+        };
+
+        // --- Element Selectors ---
+        const kpiCards = document.querySelectorAll(".glass-card");
+        const chartBars = document.querySelectorAll(
+          'main .relative.h-\\[400px\\] > div[class*="flex-1"]'
+        );
+        const toggleButtons = document.querySelectorAll(
+          "header .flex.bg-surface-container-high button"
+        );
+        const filterCheckboxes = document.querySelectorAll(
+          'aside input[type="checkbox"]'
+        );
+        const severityButtons = document.querySelectorAll(
+          'aside button[class*="rounded-full"]'
+        );
+        const anomalyIndicator = document.querySelector(
+          ".absolute.top-0.right-\\[25\\%\\]"
+        );
+
+        // --- Core Functions ---
+
+        /**
+         * Updates the Bar Chart heights and "Anomaly" visibility based on state
+         */
+        const updateVisualizations = () => {
+          chartBars.forEach((bar, index) => {
+            // Simulate dynamic data fluctuation
+            const randomHeight = Math.floor(Math.random() * 40) + 60;
+            bar.style.transition = "height 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+            bar.style.height = `${randomHeight}%`;
+
+            // Add hover effect logic via JS
+            bar.addEventListener("mouseenter", (e) => showTooltip(e, index));
+            bar.addEventListener("mouseleave", hideTooltip);
+          });
+
+          // Toggle Anomaly Indicator based on SIEM/IDS filters (example logic)
+          if (state.activeFilters.includes("IDS")) {
+            anomalyIndicator.style.opacity = "1";
+            anomalyIndicator.style.transform = "translateY(0)";
+          } else {
+            anomalyIndicator.style.opacity = "0";
+            anomalyIndicator.style.transform = "translateY(-10px)";
+          }
+        };
+
+        /**
+         * Updates KPI numbers based on Absolute vs Percentage toggle
+         */
+        const updateStats = () => {
+          const totalAlertsElement = kpiCards[0].querySelector(".text-4xl");
+          const accuracyElement = kpiCards[3].querySelector(".text-4xl");
+
+          if (state.viewMode === "percentage") {
+            totalAlertsElement.innerHTML = '100<span class="text-xl">%</span>';
+          } else {
+            totalAlertsElement.innerText = "2,481";
+          }
+
+          // Add a "pulse" animation to text when updating
+          [totalAlertsElement, accuracyElement].forEach((el) => {
+            el.classList.add("animate-pulse");
+            setTimeout(() => el.classList.remove("animate-pulse"), 500);
+          });
+        };
+
+        // --- Event Listeners ---
+
+        // 1. Toggle Absolute vs Percentage
+        toggleButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            toggleButtons.forEach((b) =>
+              b.classList.remove("bg-white", "shadow-sm")
+            );
+            btn.classList.add("bg-white", "shadow-sm");
+            state.viewMode = btn.innerText.toLowerCase();
+            updateStats();
+          });
+        });
+
+        // 2. Source Filters (EDR, IDS, SIEM)
+        filterCheckboxes.forEach((checkbox) => {
+          checkbox.addEventListener("change", (e) => {
+            const label = e.target.nextElementSibling.innerText;
+            if (e.target.checked) {
+              state.activeFilters.push(label);
+            } else {
+              state.activeFilters = state.activeFilters.filter(
+                (f) => f !== label
+              );
+            }
+            updateVisualizations();
+          });
+        });
+
+        // 3. Severity Toggles
+        severityButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            btn.classList.toggle("grayscale"); // Visual feedback for "disabled"
+            btn.style.opacity = btn.classList.contains("grayscale")
+              ? "0.5"
+              : "1";
+            updateVisualizations();
+          });
+        });
+
+        // 4. Simple Tooltip System (Creation)
+        const tooltip = document.createElement("div");
+        tooltip.className =
+          "fixed hidden bg-inverse-surface text-inverse-on-surface text-xs p-2 rounded shadow-xl z-[100] pointer-events-none";
+        document.body.appendChild(tooltip);
+
+        function showTooltip(e, index) {
+          tooltip.innerHTML = `<strong>Period ${
+            index + 1
+          }</strong><br/>TP: 85% | FP: 10%`;
+          tooltip.classList.remove("hidden");
+          tooltip.style.left = `${e.pageX + 10}px`;
+          tooltip.style.top = `${e.pageY - 40}px`;
+        }
+
+        function hideTooltip() {
+          tooltip.classList.add("hidden");
+        }
+
+        // Initialize UI
+        updateVisualizations();
+      });
+    </script>
+  </body>
+</html>
