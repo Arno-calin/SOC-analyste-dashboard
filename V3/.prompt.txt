@@ -1,0 +1,239 @@
+Design a modern, clean, and professional web dashboard for a Security Operations Center (SOC) analytics platform.
+
+The interface must help new analysts quickly understand alert activity and system behavior over time.
+
+The main feature is an interactive time-series chart displaying the evolution of alert volumes. Multiple alert sources (such as IDS, EDR, Firewall, SIEM) must be represented as separate lines that can be toggled on/off using clearly visible buttons.
+
+The dashboard should also highlight internal company events (such as maintenance, updates, deployments, or incidents) directly on the timeline using markers or annotations, allowing users to correlate these events with alert spikes or drops.
+
+Include:
+use realistic one year data
+
+Left : 
+A legend with toggle controls for each alert source
+A date picker to change the x-axis 
+
+Center : 
+A central large chart area (time-series graph)
+Visual markers on the timeline for internal events
+
+Right : 
+A side panel or summary section explaining key metrics (total alerts, peak periods, anomalies)
+
+Style:
+
+one Dark mode and one light mode (cybersecurity style)
+Minimalist, data-focused UI
+Use color coding for different alert sources
+Smooth, modern UI with subtle animations
+
+UX goals:
+
+Easy to understand for beginners
+Fast visual correlation between alerts and internal events
+Clear hierarchy and readability
+
+--------
+
+Constraints:
+
+Do NOT edit, remove, or restructure any existing HTML elements
+Only add JavaScript in a separate script block who must add at the end of the html
+If needed, use DOM manipulation to interact with existing elements
+All new behavior must be implemented purely through JavaScript
+
+Goals:
+
+Improve interactivity and user experience
+make button interactable allows user to hide corresponding courb
+Keep the code clean, modular, and well-commented
+
+Output format:
+
+Then provide the full JavaScript code to add
+
+-----
+
+Delete all existing events.
+Add three new events, each with a start date and an end date.
+Represent each event as a continuous time range on the chart (e.g., a horizontal bar, shaded region, or highlighted segment).
+Each event must have a distinct visual style (color or pattern) so users can easily identify and differentiate them, while clearly understanding that the start and end points belong to the same event.
+
+----------
+
+Design an interactive world map visualization for a SOC (Security Operations Center) dashboard.
+
+The map must display the origin of requests over a selected time period, aggregated by country.
+
+Requirements:
+
+Each country should be represented by a circular marker (bubble) placed on the map
+The size of each circle must reflect the volume of requests coming from that country (larger = more requests)
+The color of each circle must represent the normality or anomaly level of the requests (e.g., green = normal, yellow = suspicious, red = anomalous, purple = critical)
+
+Interaction & UX:
+
+Hovering over a country should display details (country name, number of requests, anomaly level, number of alerts triggered)
+Include zoom and pan capabilities for better exploration
+Ensure good readability even with many overlapping data points
+
+Additional features:
+
+Add a side panel with toggleable layers (map overlays), such as:
+Total number of requests per country
+Number of requests that triggered alerts
+Severity distribution per country
+Allow users to switch layers dynamically without reloading the page
+
+Design style:
+
+cybersecurity / threat intelligence style
+Clean, modern, and data-focused
+Strong contrast between map background and data points
+
+UX goal:
+
+Help analysts quickly identify where most requests originate
+Highlight suspicious or abnormal geographic patterns
+Provide an intuitive and interactive global view of traffic and threats
+
+-----
+
+You are working on an existing HTML file for a SOC training interface.
+
+⚠️ Important constraints:
+
+Do NOT delete, replace, or modify any existing code
+Only ADD new code
+Keep everything in a single HTML file
+All JavaScript must be added inside a <script> tag in the same file (no external files)
+Features to implement:
+Hint button
+Add a button labeled "Hint"
+When clicked, it must display the element with id="hint"
+The hint element is initially hidden
+Decision buttons behavior
+There are two existing buttons:
+id="red"
+id="green"
+When the user clicks either button:
+Display a "Next" button (initially hidden)
+Update the chart by adding annotations (simulate or modify the chart visually if needed)
+Green button styling
+Change the color of the button with id="green" from white to green
+Ensure the text remains readable
+Next button
+The "Next" button must appear only after a choice is made
+It can be hidden again after being clicked (optional behavior if needed)
+Technical requirements:
+Use vanilla JavaScript (no frameworks)
+Use addEventListener for interactions
+Do not inline JS in HTML attributes
+All logic must be inside a single <script> tag at the bottom of the HTML
+Output format:
+Return the FULL updated HTML file
+Clearly show where new code was added (with comments)
+Do not remove or rewrite existing sections
+
+The goal is to enhance interactivity for a SOC training simulation without breaking the existing structure.
+
+-----
+
+Design a dark mode cybersecurity dashboard focused on a single day of SOC activity.
+
+IMPORTANT:
+This tool is purely observational and educational. It does NOT allow interaction with any network or systems.
+
+PURPOSE:
+Help users understand hourly activity patterns and identify critical periods during a specific day.
+
+MAIN COMPONENT:
+- A heatmap grid:
+  -top X-axis: Hours (00:00 → 23:00)
+  - left Y-axis: Days of the week (Monday → Sunday)
+  - each row representing one day and each column a specific hour
+  - the name of the heatmap (e.g., week 14 of march-april)
+- Each cell:
+  - Represents activity for a specific hour of a specific day
+  - Colored from blue (no anomaly) to red (critical activity)
+- LEGEND:
+- smooth Gradient bar from blue to red labeled:
+  - “No anomaly” → “Critical activity” displayed at the top
+
+INTERACTIONS:
+- Hover on a cell:
+  - Show tooltip with:
+    - Event names
+    - Recurring events (e.g., updates, scheduled jobs, Christmas)
+    - Security impact indicator
+
+UI ELEMENTS:
+- Week selector (e.g., “Week 14, 2025”)
+- Previous / Next week navigation
+- Mode toggle:
+  - Historical
+  - Aggregated
+- Display mode : 
+    - week
+    - month
+    - year
+- An aera to display data about the selected cell
+
+STYLE:
+- Modern SOC dashboard
+- High contrast heatmap
+- Clean grid with clear separation
+- Minimal, clean layout with subtle animations
+
+GOAL:
+Reveal weekly behavioral patterns and identify high-risk days and hours and recurring patterns.
+
+----------------
+
+Imagine une interface sous forme de formulaire destinée à un analyste SOC débutant, permettant de recueillir et d’évaluer ses habitudes de travail et ses paramètres d’analyse
+afin de lui faire découvrir le fonctionnement de sa nouvelle entreprise.
+
+Version 1 — Avant (saisie utilisateur)
+
+Crée un formulaire clair et structuré où l’utilisateur peut entrer ses informations suivant le modèle de l'image jointe.
+Chaque cellules de question est posées les unes au dessous des autres, sous forme de colonne avec un champ ouvert permettant à l'utiisateur de rentrer sa réponse. Minimise l'espace entre chaque cellule sans perdre la lisibilité de ce que doit contenir chaque cellule
+
+Inclure des questions typiques d’un environnement SOC, par exemple :
+
+seuil de déclenchement d’alerte (nombre ou score)
+niveau de criticité minimal traité (low, medium, high, critical)
+fréquence de revue des alertes
+types d’événements surveillés (phishing, malware, login suspect, etc.)
+temps moyen de traitement d’une alerte
+outils utilisés (SIEM, EDR, etc.)
+
+Le design doit être :
+
+simple, lisible et pédagogique
+adapté à un utilisateur junior
+
+Version 2 — Après (correction)
+
+Génère une seconde version de cette interface où les réponses de l’utilisateur sont comparées aux standards et bonnes pratiques de son nouveau SOC.
+
+L’interface doit :
+
+afficher les valeurs saisies initialement
+montrer les valeurs normales dans la nouvelle entreprise
+mettre en évidence les écarts pour chaque champ
+
+Utiliser un code couleur clair :
+
+🟢 Vert : valeur alignée avec les standards du SOC
+🔴 Rouge : valeur plus élevée ou plus importante que la norme
+🔵 Bleu : valeur plus faible que la norme
+
+Ajouter pour chaque champ :
+
+une indication visuelle de l’écart (ex : +20%, -15%)
+
+Ajouter si pertinent :
+
+un score global de conformité
+approche pédagogique pour accompagner la montée en compétence
+différenciation visuelle nette entre la version "avant" et "après" (ex : split view ou toggle)

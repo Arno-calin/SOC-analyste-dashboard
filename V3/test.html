@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOC Analytics Pro | Advanced Heatmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700&display=swap");
+
+      :root {
+        --bg-dark: #0f172a;
+        --card-bg: #1e293b;
+        --border: #334155;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-dark);
+        color: #f1f5f9;
+      }
+
+      .glass-panel {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+      }
+
+      /* Heatmap Legend Gradient */
+      .legend-gradient {
+        background: linear-gradient(
+          to right,
+          #1e293b,
+          #1e3a8a,
+          #3b82f6,
+          #f59e0b,
+          #ef4444,
+          #fca5a5
+        );
+        height: 8px;
+        border-radius: 4px;
+      }
+
+      /* Grid Layout dynamically managed by JS */
+      .heatmap-grid {
+        display: grid;
+        gap: 3px;
+      }
+
+      .heatmap-cell {
+        aspect-ratio: 1 / 1;
+        border-radius: 2px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .heatmap-cell:hover {
+        transform: scale(1.3);
+        z-index: 20;
+        outline: 2px solid white;
+      }
+
+      /* Color States based on intensity 0-5 */
+      .lvl-0 {
+        background-color: #1e293b;
+      }
+      .lvl-1 {
+        background-color: #1e3a8a;
+      }
+      .lvl-2 {
+        background-color: #3b82f6;
+      }
+      .lvl-3 {
+        background-color: #f59e0b;
+      }
+      .lvl-4 {
+        background-color: #ef4444;
+      }
+      .lvl-5 {
+        background-color: #fca5a5;
+      }
+
+      .tooltip {
+        visibility: hidden;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(4px);
+        border: 1px solid #475569;
+        color: white;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        z-index: 100;
+        pointer-events: none;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body class="p-6">
+    <header
+      class="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+    >
+      <div>
+        <h1 class="text-2xl font-bold flex items-center gap-3">
+          <i data-lucide="shield-alert" class="text-blue-500"></i>
+          Analyse de Récurrence Temporelle
+        </h1>
+        <p class="text-slate-400 text-sm">
+          Détection d'anomalies par corrélation de fréquence
+        </p>
+      </div>
+
+      <div
+        class="flex items-center gap-4 bg-slate-800/80 p-2 rounded-xl border border-slate-700"
+      >
+        <div class="flex items-center border-r border-slate-700 pr-2">
+          <button
+            onclick="navigateTime(-1)"
+            class="p-2 hover:bg-slate-700 rounded-lg transition"
+          >
+            <i data-lucide="chevron-left" size="18"></i>
+          </button>
+          <span
+            id="current-period-label"
+            class="px-4 font-mono text-sm font-bold min-w-[120px] text-center"
+            >Avril 2026</span
+          >
+          <button
+            onclick="navigateTime(1)"
+            class="p-2 hover:bg-slate-700 rounded-lg transition"
+          >
+            <i data-lucide="chevron-right" size="18"></i>
+          </button>
+        </div>
+
+        <select
+          id="granularity"
+          onchange="initDashboard()"
+          class="bg-transparent text-sm font-semibold outline-none cursor-pointer text-blue-400"
+        >
+          <option value="day">Vue Quotidienne (24h)</option>
+          <option value="month">Vue Mensuelle (30j)</option>
+          <option value="year">Vue Annuelle (12m)</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto space-y-6">
+      <section class="glass-panel p-6 shadow-2xl">
+        <div class="mb-8">
+          <div
+            class="flex justify-between text-[10px] uppercase font-bold text-slate-500 mb-2 tracking-widest"
+          >
+            <span>Activité Normale</span>
+            <span>Seuil d'Anomalie</span>
+            <span>Critique / Suspect</span>
+          </div>
+          <div class="legend-gradient w-full"></div>
+          <div
+            class="flex justify-between text-[9px] text-slate-600 mt-1 font-mono"
+          >
+            <span>0%</span><span>25%</span><span>50%</span><span>75%</span
+            ><span>100%</span>
+          </div>
+        </div>
+
+        <div id="column-labels" class="heatmap-grid mb-2"></div>
+
+        <div id="heatmap-container" class="space-y-[3px]"></div>
+      </section>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-panel p-5 border-l-4 border-blue-500">
+          <div class="flex items-center gap-3 mb-2">
+            <i data-lucide="info" class="text-blue-500" size="18"></i>
+            <h3 class="font-bold">Logique Prédictive</h3>
+          </div>
+          <p id="predictive-text" class="text-sm text-slate-400">
+            Sélectionnez une cellule pour analyser la probabilité de menace.
+          </p>
+        </div>
+
+        <div class="glass-panel p-5 border-l-4 border-amber-500">
+          <div class="flex items-center gap-3 mb-2">
+            <i data-lucide="zap" class="text-amber-500" size="18"></i>
+            <h3 class="font-bold">Anomalies Détectées</h3>
+          </div>
+          <div
+            id="anomaly-counter"
+            class="text-2xl font-mono font-bold text-amber-500"
+          >
+            0
+          </div>
+          <p class="text-[10px] text-slate-500 uppercase tracking-widest">
+            Événements hors-norme sur la période
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+      // Data & State
+      let currentGranularity = "day";
+      const labels = {
+        day: {
+          rows: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+          cols: 24,
+          labelPrefix: "h",
+        },
+        month: {
+          rows: ["S1", "S2", "S3", "S4"],
+          cols: 7,
+          labelPrefix: "Jour ",
+        },
+        year: { rows: ["SOC-A", "SOC-B", "SOC-C"], cols: 12, labelPrefix: "M" },
+      };
+
+      function initDashboard() {
+        currentGranularity = document.getElementById("granularity").value;
+        renderColumnLabels();
+        renderHeatmap();
+        lucide.createIcons();
+      }
+
+      function renderColumnLabels() {
+        const container = document.getElementById("column-labels");
+        const config = labels[currentGranularity];
+        container.style.gridTemplateColumns = `60px repeat(${config.cols}, minmax(0, 1fr))`;
+
+        let html = '<div class="w-[60px]"></div>';
+        for (let i = 0; i < config.cols; i++) {
+          html += `<div class="text-[9px] text-center text-slate-500 font-mono">${i}${
+            config.labelPrefix === "h" ? "h" : ""
+          }</div>`;
+        }
+        container.innerHTML = html;
+      }
+
+      function renderHeatmap() {
+        const container = document.getElementById("heatmap-container");
+        const config = labels[currentGranularity];
+        container.innerHTML = "";
+        let anomaliesFound = 0;
+
+        config.rows.forEach((rowName) => {
+          const rowEl = document.createElement("div");
+          rowEl.className = "heatmap-grid items-center";
+          rowEl.style.gridTemplateColumns = `60px repeat(${config.cols}, minmax(0, 1fr))`;
+
+          let rowHtml = `<div class="text-[10px] font-bold text-slate-400 uppercase">${rowName}</div>`;
+
+          for (let i = 0; i < config.cols; i++) {
+            // Simulation logic: higher randomness for "Year" or "Month"
+            let intensity = Math.floor(Math.random() * 3);
+            if (Math.random() > 0.92) {
+              intensity = 5; // Anomaly spike
+              anomaliesFound++;
+            }
+
+            const isAnomaly = intensity >= 4;
+            const anomalyClass = isAnomaly
+              ? "ring-1 ring-amber-500 ring-offset-1 ring-offset-slate-900"
+              : "";
+
+            rowHtml += `
+                        <div class="heatmap-cell lvl-${intensity} ${anomalyClass}" 
+                             onmouseover="showTooltip(event, ${intensity}, '${rowName}', ${i})"
+                             onmouseout="hideTooltip()"
+                             onclick="updatePrediction(${intensity})">
+                        </div>`;
+          }
+          rowEl.innerHTML = rowHtml;
+          container.appendChild(rowEl);
+        });
+
+        document.getElementById("anomaly-counter").innerText = anomaliesFound;
+      }
+
+      function showTooltip(e, lvl, row, col) {
+        const tooltip = document.getElementById("tooltip");
+        let status =
+          lvl > 3
+            ? '<span class="text-red-400">SUSPECT</span>'
+            : '<span class="text-blue-400">NORMAL</span>';
+        let desc =
+          lvl > 3
+            ? "Fréquence inhabituelle pour ce créneau."
+            : "Volume conforme aux historiques.";
+
+        tooltip.style.visibility = "visible";
+        tooltip.innerHTML = `
+                <div class="font-bold mb-1">${row} - Slot ${col}</div>
+                <div class="mb-2">Status: ${status}</div>
+                <div class="text-slate-400 leading-tight">${desc}</div>
+                <div class="mt-2 text-[9px] text-slate-500 italic">Probabilité de faux positif: ${
+                  100 - lvl * 20
+                }%</div>
+            `;
+        updateTooltipPos(e);
+      }
+
+      function hideTooltip() {
+        document.getElementById("tooltip").style.visibility = "hidden";
+      }
+
+      function updateTooltipPos(e) {
+        const tooltip = document.getElementById("tooltip");
+        tooltip.style.top = e.pageY + 20 + "px";
+        tooltip.style.left = e.pageX + 20 + "px";
+      }
+
+      function updatePrediction(lvl) {
+        const p = document.getElementById("predictive-text");
+        if (lvl >= 4) {
+          p.innerHTML = `<span class="text-red-400 font-bold">ALERTE :</span> Cet événement est <span class="underline">probablement suspect</span>. Sa rareté historique (lvl ${lvl}) suggère une tentative d'exfiltration ou un scan furtif.`;
+        } else {
+          p.innerHTML = `<span class="text-green-400 font-bold">INFO :</span> Événement <span class="underline">probablement normal</span>. La récurrence est stable. Aucune action requise.`;
+        }
+      }
+
+      function navigateTime(dir) {
+        const label = document.getElementById("current-period-label");
+        // Logic de changement de date simplifiée pour la démo
+        const dates = ["Mars 2026", "Avril 2026", "Mai 2026"];
+        label.innerText = dir > 0 ? "Mai 2026" : "Mars 2026";
+        initDashboard(); // Refresh data
+      }
+
+      function updateTooltipPos(e) {
+        const tooltip = document.getElementById("tooltip");
+        // Empêcher le débordement à droite
+        let x = e.pageX + 20;
+        if (x + 200 > window.innerWidth) x = e.pageX - 210;
+        tooltip.style.top = e.pageY + 20 + "px";
+        tooltip.style.left = x + "px";
+      }
+
+      // Init
+      window.onload = initDashboard;
+    </script>
+  </body>
+</html>

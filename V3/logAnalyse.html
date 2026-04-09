@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Neon Tokyo SOC - Cyber Range</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#fedf49",
+              "on-secondary-container": "#005b47",
+              "tertiary-fixed-dim": "#efd13b",
+              "tertiary-dim": "#5d4f00",
+              "on-surface-variant": "#5a5972",
+              "on-secondary": "#c5ffe9",
+              "primary-container": "#ff7195",
+              "surface-variant": "#dbd9ff",
+              "surface-container-highest": "#dbd9ff",
+              "on-tertiary": "#fff3c8",
+              tertiary: "#6b5b00",
+              background: "#0a0a12",
+              secondary: "#00ffcc",
+              "surface-dim": "#d2d1fa",
+              "secondary-dim": "#005b47",
+              primary: "#ff2d78",
+              "inverse-surface": "#0c0c21",
+              "on-primary-fixed-variant": "#5e0025",
+              "error-container": "#fb5151",
+              error: "#b31b25",
+              "secondary-fixed": "#00fcca",
+              "on-primary": "#ffeff0",
+              "on-primary-fixed": "#000000",
+              "on-primary-container": "#4d001d",
+              "surface-tint": "#b6004f",
+              "primary-dim": "#a00044",
+              "on-background": "#f8f5ff",
+              "on-error-container": "#570008",
+              "surface-bright": "#f8f5ff",
+              outline: "#75748e",
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#00fcca",
+              "surface-container-high": "#e2dfff",
+              "on-tertiary-fixed-variant": "#695900",
+              "on-error": "#ffefee",
+              "on-secondary-fixed-variant": "#006650",
+              "surface-container": "#e8e5ff",
+              "error-dim": "#9f0519",
+              "surface-container-low": "#f2efff",
+              "on-surface": "#f8f5ff",
+              "on-tertiary-container": "#5e4f00",
+              "secondary-fixed-dim": "#00edbd",
+              "inverse-primary": "#ff4c83",
+              "tertiary-container": "#fedf49",
+              "on-tertiary-fixed": "#483d00",
+              "on-secondary-fixed": "#004737",
+              "primary-fixed-dim": "#ff5486",
+              "primary-fixed": "#ff7195",
+              "outline-variant": "#acaac6",
+              "inverse-on-surface": "#9c9ab6",
+              surface: "#0a0a12",
+            },
+            fontFamily: {
+              headline: ["Sora"],
+              body: ["Inter"],
+              label: ["Space Grotesk"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .neon-glow-pink {
+        text-shadow: 0 0 8px #ff2d78;
+      }
+      .neon-glow-cyan {
+        text-shadow: 0 0 8px #00ffcc;
+      }
+      .neon-border-pink {
+        border: 1px solid rgba(255, 45, 120, 0.3);
+        box-shadow: inset 0 0 12px rgba(255, 45, 120, 0.1);
+      }
+      .neon-border-cyan {
+        border: 1px solid rgba(0, 255, 204, 0.3);
+        box-shadow: inset 0 0 12px rgba(0, 255, 204, 0.1);
+      }
+      .scanline {
+        background: linear-gradient(
+            to bottom,
+            rgba(18, 16, 16, 0) 50%,
+            rgba(0, 0, 0, 0.25) 50%
+          ),
+          linear-gradient(
+            to right,
+            rgba(255, 0, 0, 0.06),
+            rgba(0, 255, 0, 0.02),
+            rgba(0, 0, 255, 0.06)
+          );
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+      }
+      .log-line:hover {
+        background: rgba(0, 255, 204, 0.05);
+      }
+      .indicator-hook:hover {
+        color: #00ffcc;
+        text-shadow: 0 0 5px #00ffcc;
+        transition: all 0.2s;
+      }
+
+      @keyframes pulse-cyan {
+        0% {
+          box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(0, 255, 204, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 255, 204, 0);
+        }
+      }
+
+      .correct-flash {
+        animation: pulse-cyan 1s ease-out;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-[#0a0a12] text-on-surface font-body selection:bg-primary selection:text-white"
+  >
+    <!-- Main Canvas -->
+    <main
+      class="ml-64 pt-16 min-h-screen flex flex-col relative overflow-hidden"
+    >
+      <!-- Grid Background Detail -->
+      <div
+        class="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style="
+          background-image: radial-gradient(#00ffcc 1px, transparent 1px);
+          background-size: 32px 32px;
+        "
+      ></div>
+      <div
+        class="flex-1 p-8 max-w-6xl mx-auto w-full flex flex-col gap-8 relative z-10"
+      >
+        <!-- Breadcrumbs / Status Line -->
+        <div class="flex items-center justify-between font-label">
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-gray-500">TRAINING</span>
+            <span class="material-symbols-outlined text-[10px] text-gray-700"
+              >chevron_right</span
+            >
+            <span class="text-[#00ffcc]">NETWORK_ANOMALY_04</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span class="flex items-center gap-1 text-xs text-tertiary-fixed">
+              <span class="material-symbols-outlined text-xs">timer</span> 02:45
+            </span>
+            <span class="h-4 w-[1px] bg-gray-800"></span>
+            <span class="text-xs text-gray-500"
+              >THREAT LEVEL: <span class="text-[#ff2d78]">CRITICAL</span></span
+            >
+          </div>
+        </div>
+        <!-- Log Window Card -->
+        <div
+          class="neon-border-cyan bg-[#0a0a12]/80 backdrop-blur-sm rounded-lg flex flex-col overflow-hidden"
+        >
+          <div
+            class="bg-gray-900/50 border-b border-[#00ffcc]/20 px-4 py-2 flex items-center justify-between"
+          >
+            <div class="flex items-center gap-2">
+              <div class="flex gap-1.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+              </div>
+              <span
+                class="text-[10px] font-label text-gray-500 ml-2 tracking-widest"
+                >CONSOLE_VIEW::SYSLOG_AUTH</span
+              >
+            </div>
+            <span
+              class="material-symbols-outlined text-sm text-gray-500 cursor-pointer hover:text-[#00ffcc]"
+              >terminal</span
+            >
+          </div>
+          <div
+            class="p-6 font-mono text-sm leading-relaxed overflow-x-auto relative"
+          >
+            <div class="scanline absolute inset-0 opacity-10"></div>
+            <div class="space-y-1 relative z-10">
+              <div class="log-line group flex gap-4 text-gray-400">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:15]</span
+                >
+                <span class="text-[#00ffcc]/80"
+                  >- INFO: Service systemd started.</span
+                >
+              </div>
+              <div class="log-line group flex gap-4 text-gray-400">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:18]</span
+                >
+                <span class="text-secondary/70"
+                  >- SRC:
+                  <span
+                    class="underline decoration-dotted cursor-help group-hover:text-secondary transition-colors"
+                    title="External IP identifying as Cloud Provider range"
+                    >192.168.1.105</span
+                  >
+                  - USER: root - STATUS:
+                  <span class="text-gray-500">LOGIN_START</span></span
+                >
+              </div>
+              <div class="log-line group flex gap-4 text-[#ff2d78]/90">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:22]</span
+                >
+                <span
+                  >- SRC:
+                  <span
+                    class="underline decoration-dotted cursor-help"
+                    title="Repeated failed attempts from same source"
+                    >192.168.1.105</span
+                  >
+                  - USER: admin - STATUS:
+                  <span class="font-bold neon-glow-pink">FAILED_LOGIN</span> -
+                  ATTEMPT: 142</span
+                >
+              </div>
+              <div class="log-line group flex gap-4 text-[#ff2d78]/90">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:23]</span
+                >
+                <span
+                  >- SRC:
+                  <span
+                    class="underline decoration-dotted cursor-help"
+                    title="Repeated failed attempts from same source"
+                    >192.168.1.105</span
+                  >
+                  - USER: admin - STATUS:
+                  <span class="font-bold neon-glow-pink">FAILED_LOGIN</span> -
+                  ATTEMPT: 143</span
+                >
+              </div>
+              <div class="log-line group flex gap-4 text-[#ff2d78]/90">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:24]</span
+                >
+                <span
+                  >- SRC:
+                  <span
+                    class="underline decoration-dotted cursor-help"
+                    title="Repeated failed attempts from same source"
+                    >192.168.1.105</span
+                  >
+                  - USER: admin - STATUS:
+                  <span class="font-bold neon-glow-pink">FAILED_LOGIN</span> -
+                  ATTEMPT: 144</span
+                >
+              </div>
+              <div class="log-line group flex gap-4 text-[#ff2d78]/90">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:25]</span
+                >
+                <span
+                  >- SRC:
+                  <span
+                    class="underline decoration-dotted cursor-help"
+                    title="Repeated failed attempts from same source"
+                    >192.168.1.105</span
+                  >
+                  - USER: admin - STATUS:
+                  <span class="font-bold neon-glow-pink">FAILED_LOGIN</span> -
+                  ATTEMPT: 145</span
+                >
+              </div>
+              <div class="log-line group flex gap-4 text-[#ff2d78]/90">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:26]</span
+                >
+                <span
+                  >- SRC:
+                  <span
+                    class="underline decoration-dotted cursor-help"
+                    title="Repeated failed attempts from same source"
+                    >192.168.1.105</span
+                  >
+                  - USER: guest - STATUS:
+                  <span class="font-bold neon-glow-pink">FAILED_LOGIN</span> -
+                  ATTEMPT: 146</span
+                >
+              </div>
+              <div class="log-line group flex gap-4 text-gray-500 italic">
+                <span class="text-gray-600 shrink-0"
+                  >[2025-05-14 02:14:30]</span
+                >
+                <span>... system truncated 2,400 matching entries ...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Question & Interaction Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Activity Classification -->
+          <div class="neon-border-pink bg-surface p-6 rounded-lg space-y-6">
+            <div>
+              <h3
+                class="font-headline text-lg font-bold mb-2 uppercase tracking-wide"
+              >
+                Threat Analysis
+              </h3>
+              <p class="text-sm text-gray-400">
+                Identify the primary attack vector visible in the console logs
+                above.
+              </p>
+            </div>
+            <div class="space-y-3 font-label">
+              <label
+                class="flex items-center gap-4 p-3 border border-gray-800 hover:border-[#00ffcc]/40 cursor-pointer group transition-all rounded"
+              >
+                <input
+                  class="text-[#ff2d78] focus:ring-[#ff2d78] bg-transparent border-gray-700"
+                  name="activity"
+                  type="radio"
+                />
+                <span
+                  class="text-sm text-gray-300 group-hover:text-white transition-colors"
+                  >Normal Activity</span
+                >
+              </label>
+              <label
+                class="flex items-center gap-4 p-3 border border-[#ff2d78]/40 bg-[#ff2d78]/5 cursor-pointer group transition-all rounded"
+              >
+                <input
+                  checked=""
+                  class="text-[#ff2d78] focus:ring-[#ff2d78] bg-transparent border-[#ff2d78]"
+                  name="activity"
+                  type="radio"
+                />
+                <span class="text-sm text-[#ff2d78] font-bold transition-colors"
+                  >Brute Force Attack</span
+                >
+              </label>
+              <label
+                class="flex items-center gap-4 p-3 border border-gray-800 hover:border-[#00ffcc]/40 cursor-pointer group transition-all rounded"
+              >
+                <input
+                  class="text-[#ff2d78] focus:ring-[#ff2d78] bg-transparent border-gray-700"
+                  name="activity"
+                  type="radio"
+                />
+                <span
+                  class="text-sm text-gray-300 group-hover:text-white transition-colors"
+                  >SQL Injection</span
+                >
+              </label>
+              <label
+                class="flex items-center gap-4 p-3 border border-gray-800 hover:border-[#00ffcc]/40 cursor-pointer group transition-all rounded"
+              >
+                <input
+                  class="text-[#ff2d78] focus:ring-[#ff2d78] bg-transparent border-gray-700"
+                  name="activity"
+                  type="radio"
+                />
+                <span
+                  class="text-sm text-gray-300 group-hover:text-white transition-colors"
+                  >Lateral Movement</span
+                >
+              </label>
+            </div>
+          </div>
+          <!-- Criticality & CTA -->
+          <div class="flex flex-col gap-8">
+            <div class="neon-border-cyan bg-surface p-6 rounded-lg flex-1">
+              <h3
+                class="font-headline text-lg font-bold mb-6 uppercase tracking-wide"
+              >
+                Severity Level
+              </h3>
+              <div class="grid grid-cols-2 gap-4 font-label">
+                <button
+                  class="py-3 border border-gray-800 text-gray-500 hover:border-gray-500 text-xs font-bold transition-all uppercase"
+                >
+                  Low
+                </button>
+                <button
+                  class="py-3 border border-gray-800 text-gray-500 hover:border-gray-500 text-xs font-bold transition-all uppercase"
+                >
+                  Medium
+                </button>
+                <button
+                  class="py-3 border border-gray-800 text-gray-500 hover:border-gray-500 text-xs font-bold transition-all uppercase"
+                >
+                  High
+                </button>
+                <button
+                  class="py-3 border border-[#ff2d78] text-[#ff2d78] bg-[#ff2d78]/10 text-xs font-bold transition-all uppercase shadow-[0_0_15px_rgba(255,45,120,0.2)]"
+                >
+                  Critical
+                </button>
+              </div>
+            </div>
+            <button
+              class="group relative w-full py-5 bg-[#ff2d78] text-white font-headline font-extrabold uppercase tracking-[0.3em] overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(255,45,120,0.5)] active:scale-[0.98]"
+            >
+              <span class="relative z-10">Submit Answer</span>
+              <div
+                class="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"
+              ></div>
+            </button>
+          </div>
+        </div>
+        <!-- Feedback Panel (Initial Hidden State / Simulation of active exercise) -->
+        <!-- Note: This would typically be revealed via JS, but styled here for UI purposes -->
+        <div
+          class="mt-8 border-t border-gray-800 pt-8 opacity-40 grayscale pointer-events-none"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div
+              class="md:col-span-1 flex flex-col items-center justify-center p-8 bg-gray-900/50 border border-gray-800 rounded-lg"
+            >
+              <span
+                class="material-symbols-outlined text-6xl text-gray-700 mb-4"
+                >verified</span
+              >
+              <h4 class="font-headline font-bold text-gray-500">
+                Awaiting Response
+              </h4>
+            </div>
+            <div class="md:col-span-2 space-y-4">
+              <div class="h-4 w-1/4 bg-gray-800 rounded"></div>
+              <div
+                class="h-20 w-full bg-gray-900/30 border border-gray-800 rounded p-4"
+              >
+                <div class="h-2 w-full bg-gray-800 rounded mb-2"></div>
+                <div class="h-2 w-5/6 bg-gray-800 rounded mb-2"></div>
+                <div class="h-2 w-4/6 bg-gray-800 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Decorative background imagery for vibe -->
+      <div
+        class="absolute bottom-0 right-0 w-[500px] h-[500px] opacity-10 blur-[100px] bg-secondary pointer-events-none"
+      ></div>
+      <div
+        class="absolute top-1/4 left-1/4 w-[300px] h-[300px] opacity-10 blur-[120px] bg-primary pointer-events-none"
+      ></div>
+    </main>
+    <!-- FAB (Contextual Suppressed for specific tasks but kept for global help if needed) -->
+    <!-- Removed as per logic: Screen is Task-Focused Training -->
+    <!-- Footer Meta -->
+    <footer
+      class="ml-64 p-6 border-t border-gray-900 bg-[#0a0a12] flex justify-between items-center text-[10px] text-gray-600 font-label tracking-widest uppercase"
+    >
+      <div>System Version: NT-SOC v2.4.0-STABLE</div>
+      <div class="flex gap-4">
+        <span class="text-[#00ffcc]">Encrypted Connection Active</span>
+        <span class="text-[#ff2d78]">Admin Auth Required</span>
+      </div>
+    </footer>
+    <script>
+      /**
+       * Neon Tokyo SOC - Cyber Range Engine (Unified)
+       */
+      document.addEventListener("DOMContentLoaded", () => {
+        // 1. Data State
+        const exerciseData = {
+          id: "NETWORK_ANOMALY_04",
+          correctType: "Brute Force Attack", // Matches the text in your HTML <span>
+          correctSeverity: "CRITICAL",
+          explanation:
+            "The logs indicate an automated authentication attack. High-frequency attempts (140+) from IP 192.168.1.105 targeting 'admin' and 'guest' follow a classic brute-force pattern.",
+          indicators: [
+            "IP: 192.168.1.105",
+            "Status: FAILED_LOGIN",
+            "Count: 140+",
+          ],
+        };
+
+        let selectedSeverity = "CRITICAL"; // Matches your default highlighted button
+
+        // 2. Selectors
+        const submitBtn = document.querySelector(
+          "button.group.relative.w-full"
+        );
+        const severityButtons = document.querySelectorAll(
+          ".grid.grid-cols-2.gap-4 button"
+        );
+        const feedbackPanel = document.querySelector(".mt-8.border-t");
+        const radioInputs = document.querySelectorAll('input[name="activity"]');
+        const logLines = document.querySelectorAll(".log-line");
+
+        // 3. Log Hover Visibility Enhancement
+        logLines.forEach((line) => {
+          line.style.transition = "all 0.2s ease";
+          line.addEventListener("mouseenter", () => {
+            line.classList.add("bg-[#00ffcc]/10"); // Tailwind-ish opacity
+            line.style.paddingLeft = "12px";
+            line.style.borderLeft = "2px solid #00ffcc";
+            line.style.color = "#ffffff";
+          });
+          line.addEventListener("mouseleave", () => {
+            line.classList.remove("bg-[#00ffcc]/10");
+            line.style.paddingLeft = "0px";
+            line.style.borderLeft = "none";
+            line.style.color = "";
+          });
+        });
+
+        // 4. Severity Level Interactivity
+        severityButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            // Reset all buttons to default 'unselected' look
+            severityButtons.forEach((b) => {
+              b.classList.remove(
+                "border-[#ff2d78]",
+                "text-[#ff2d78]",
+                "bg-[#ff2d78]/10",
+                "shadow-[0_0_15px_rgba(255,45,120,0.2)]"
+              );
+              b.classList.add("border-gray-800", "text-gray-500");
+            });
+
+            // Apply 'selected' neon pink look to clicked button
+            btn.classList.remove("border-gray-800", "text-gray-500");
+            btn.classList.add(
+              "border-[#ff2d78]",
+              "text-[#ff2d78]",
+              "bg-[#ff2d78]/10",
+              "shadow-[0_0_15_rgba(255,45,120,0.2)]"
+            );
+
+            selectedSeverity = btn.textContent.trim().toUpperCase();
+          });
+        });
+
+        // 5. Submission & Verification Logic
+        submitBtn.addEventListener("click", () => {
+          // Find which radio is checked
+          let userTypeSelection = "";
+          radioInputs.forEach((input) => {
+            if (input.checked) {
+              // Get the text from the <span> next to the radio input
+              userTypeSelection = input.parentElement
+                .querySelector("span")
+                .textContent.trim();
+            }
+          });
+
+          // Grade the answer
+          const isTypeCorrect = userTypeSelection === exerciseData.correctType;
+          const isSeverityCorrect =
+            selectedSeverity === exerciseData.correctSeverity;
+
+          displayFeedback(isTypeCorrect && isSeverityCorrect);
+        });
+
+        // 6. UI Feedback System
+        function displayFeedback(isSuccess) {
+          // Remove the grayscale and opacity filters
+          feedbackPanel.classList.remove(
+            "opacity-40",
+            "grayscale",
+            "pointer-events-none"
+          );
+
+          const statusColor = isSuccess ? "#00ffcc" : "#ff2d78";
+          const statusIcon = isSuccess ? "verified" : "report";
+          const statusTitle = isSuccess
+            ? "THREAT IDENTIFIED"
+            : "ANALYSIS INCORRECT";
+          const borderColor = isSuccess
+            ? "rgba(0, 255, 204, 0.3)"
+            : "rgba(255, 45, 120, 0.3)";
+
+          feedbackPanel.innerHTML = `
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div class="md:col-span-1 flex flex-col items-center justify-center p-8 bg-gray-900/50 border rounded-lg" 
+                       style="border-color: ${statusColor}; box-shadow: inset 0 0 12px ${statusColor}33">
+                      <span class="material-symbols-outlined text-6xl mb-4" style="color: ${statusColor}">${statusIcon}</span>
+                      <h4 class="font-headline font-bold uppercase tracking-widest text-center" style="color: ${statusColor}">${statusTitle}</h4>
+                  </div>
+                  <div class="md:col-span-2 space-y-4">
+                      <div class="flex items-center gap-2">
+                          <span class="text-[10px] text-gray-500 uppercase tracking-widest">Intelligence Report</span>
+                          <div class="h-[1px] flex-1 bg-gray-800"></div>
+                      </div>
+                      <p class="text-sm text-gray-300 leading-relaxed">${
+                        exerciseData.explanation
+                      }</p>
+                      <div class="flex flex-wrap gap-3">
+                          ${exerciseData.indicators
+                            .map(
+                              (ind) => `
+                              <span class="text-[10px] font-label px-2 py-1 border border-[#00ffcc]/30 text-[#00ffcc] bg-[#00ffcc]/5">
+                                  ${ind}
+                              </span>
+                          `
+                            )
+                            .join("")}
+                      </div>
+                  </div>
+              </div>
+            `;
+
+          // Smooth scroll to results
+          feedbackPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    </script>
+  </body>
+</html>
+entrainement pas onboarding, nous intéresse pas car c'est avant d'etre recruté

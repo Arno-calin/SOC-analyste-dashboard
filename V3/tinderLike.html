@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>NEON_SOC_TRAINING | Analyst Module</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space_Grotesk:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              surface: "#f8f5ff",
+              "secondary-container": "#00fcca",
+              "on-secondary-fixed-variant": "#006650",
+              "primary-fixed": "#ff7195",
+              "surface-container-high": "#e2dfff",
+              "surface-tint": "#b6004f",
+              outline: "#75748e",
+              "surface-variant": "#dbd9ff",
+              "on-primary-container": "#4d001d",
+              "surface-container-low": "#f2efff",
+              "on-error-container": "#570008",
+              "on-secondary-fixed": "#004737",
+              secondary: "#006852",
+              "surface-container-highest": "#dbd9ff",
+              "on-error": "#ffefee",
+              background: "#f8f5ff",
+              "tertiary-fixed-dim": "#efd13b",
+              "surface-dim": "#d2d1fa",
+              "inverse-primary": "#ff4c83",
+              "primary-container": "#ff7195",
+              "inverse-on-surface": "#9c9ab6",
+              "on-surface-variant": "#5a5972",
+              "tertiary-dim": "#5d4f00",
+              "tertiary-container": "#fedf49",
+              tertiary: "#6b5b00",
+              "on-tertiary-container": "#5e4f00",
+              "surface-container": "#e8e5ff",
+              "on-tertiary-fixed": "#483d00",
+              "on-tertiary": "#fff3c8",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#00fcca",
+              "secondary-fixed-dim": "#00edbd",
+              "on-primary": "#ffeff0",
+              "inverse-surface": "#0c0c21",
+              "outline-variant": "#acaac6",
+              "secondary-dim": "#005b47",
+              "on-primary-fixed": "#000000",
+              "error-container": "#fb5151",
+              "on-background": "#2d2d43",
+              "on-primary-fixed-variant": "#5e0025",
+              "on-tertiary-fixed-variant": "#695900",
+              error: "#b31b25",
+              "primary-dim": "#a00044",
+              "primary-fixed-dim": "#ff5486",
+              "tertiary-fixed": "#fedf49",
+              "on-secondary-container": "#005b47",
+              "error-dim": "#9f0519",
+              primary: "#b6004f",
+              "on-secondary": "#c5ffe9",
+              "surface-bright": "#f8f5ff",
+              "on-surface": "#2d2d43",
+            },
+            fontFamily: {
+              headline: ["Sora"],
+              body: ["Inter"],
+              label: ["Space Grotesk"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #0a0a12;
+        color: #ffffff;
+        background-image: radial-gradient(
+          circle at 50% 50%,
+          rgba(255, 45, 120, 0.05) 0%,
+          transparent 80%
+        );
+        min-height: 100vh;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .chart-container {
+        mask-image: linear-gradient(
+          to right,
+          transparent,
+          black 10%,
+          black 90%,
+          transparent
+        );
+      }
+      .scanline {
+        background: linear-gradient(
+          to bottom,
+          transparent 50%,
+          rgba(0, 255, 204, 0.03) 50%
+        );
+        background-size: 100% 4px;
+      }
+      .glow-text-cyan {
+        text-shadow: 0 0 8px #00ffcc;
+      }
+      .glow-text-pink {
+        text-shadow: 0 0 8px #ff2d78;
+      }
+      /* NEW CODE START: Initial state for hidden elements */
+      #hint {
+        display: none;
+      }
+      #next-btn {
+        display: none;
+      }
+      /* NEW CODE END */
+    </style>
+  </head>
+  <body
+    class="font-body selection:bg-primary selection:text-white overflow-hidden"
+  >
+    <aside
+      class="fixed left-0 top-16 bottom-0 w-64 border-r border-[#ff2d78]/10 sidebar-blur z-40 hidden lg:flex flex-col overflow-y-auto"
+    >
+      <div class="p-6 border-b border-white/5">
+        <h3
+          class="font-label text-xs font-bold text-slate-400 tracking-[0.2em] uppercase"
+        >
+          Pattern History
+        </h3>
+      </div>
+      <div class="flex flex-col p-4 gap-4">
+        <!-- History Item 1 -->
+        <div
+          class="group border border-white/5 bg-white/2 p-3 hover:border-[#00ffcc]/30 transition-all cursor-pointer"
+        >
+          <div
+            class="h-16 w-full mb-3 bg-[#0d0d1a] border border-white/5 relative overflow-hidden"
+          >
+            <svg
+              class="w-full h-full"
+              preserveaspectratio="none"
+              viewbox="0 0 100 40"
+            >
+              <path
+                d="M0,35 L20,32 L40,36 L60,30 L80,34 L100,32"
+                fill="none"
+                opacity="0.6"
+                stroke="white"
+                stroke-width="1"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-[#00ffcc]"></div>
+            <span
+              class="font-label text-[9px] text-[#00ffcc] tracking-wider uppercase"
+              >Acceptable Activity</span
+            >
+          </div>
+          <div class="text-[9px] text-slate-500 font-label mt-1">
+            ID: #841 - 04:22 UTC
+          </div>
+        </div>
+        <!-- History Item 2 -->
+        <div
+          class="group border border-white/5 bg-white/2 p-3 hover:border-[#ff2d78]/30 transition-all cursor-pointer"
+        >
+          <div
+            class="h-16 w-full mb-3 bg-[#0d0d1a] border border-white/5 relative overflow-hidden"
+          >
+            <svg
+              class="w-full h-full"
+              preserveaspectratio="none"
+              viewbox="0 0 100 40"
+            >
+              <path
+                d="M0,35 L20,30 L30,10 L40,30 L50,5 L60,35 L100,38"
+                fill="none"
+                opacity="0.6"
+                stroke="#ff2d78"
+                stroke-width="1"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-[#ff2d78]"></div>
+            <span
+              class="font-label text-[9px] text-[#ff2d78] tracking-wider uppercase"
+              >Critical Alert</span
+            >
+          </div>
+          <div class="text-[9px] text-slate-500 font-label mt-1">
+            ID: #840 - 04:15 UTC
+          </div>
+        </div>
+        <!-- History Item 3 -->
+        <div
+          class="group border border-white/5 bg-white/2 p-3 hover:border-[#00ffcc]/30 transition-all cursor-pointer"
+        >
+          <div
+            class="h-16 w-full mb-3 bg-[#0d0d1a] border border-white/5 relative overflow-hidden"
+          >
+            <svg
+              class="w-full h-full"
+              preserveaspectratio="none"
+              viewbox="0 0 100 40"
+            >
+              <path
+                d="M0,34 L25,35 L50,33 L75,34 L100,35"
+                fill="none"
+                opacity="0.6"
+                stroke="white"
+                stroke-width="1"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-[#00ffcc]"></div>
+            <span
+              class="font-label text-[9px] text-[#00ffcc] tracking-wider uppercase"
+              >Acceptable Activity</span
+            >
+          </div>
+          <div class="text-[9px] text-slate-500 font-label mt-1">
+            ID: #839 - 04:02 UTC
+          </div>
+        </div>
+        <!-- History Item 4 -->
+        <div
+          class="group border border-white/5 bg-white/2 p-3 hover:border-[#ff2d78]/30 transition-all cursor-pointer"
+        >
+          <div
+            class="h-16 w-full mb-3 bg-[#0d0d1a] border border-white/5 relative overflow-hidden"
+          >
+            <svg
+              class="w-full h-full"
+              preserveaspectratio="none"
+              viewbox="0 0 100 40"
+            >
+              <path
+                d="M0,35 L40,35 L45,15 L50,35 L55,20 L60,35 L100,35"
+                fill="none"
+                opacity="0.6"
+                stroke="#ff2d78"
+                stroke-width="1"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-1.5 h-1.5 rounded-full bg-[#ff2d78]"></div>
+            <span
+              class="font-label text-[9px] text-[#ff2d78] tracking-wider uppercase"
+              >Critical Alert</span
+            >
+          </div>
+          <div class="text-[9px] text-slate-500 font-label mt-1">
+            ID: #838 - 03:50 UTC
+          </div>
+        </div>
+      </div>
+      <div class="mt-auto p-6 border-t border-white/5 text-center">
+        <button
+          class="text-[9px] font-label text-slate-500 hover:text-white uppercase tracking-[0.2em] transition-colors"
+        >
+          Load_More_Data
+        </button>
+      </div>
+    </aside>
+    <main
+      class="pt-24 pb-12 px-6 max-w-7xl mx-auto h-screen flex flex-col items-center justify-center relative"
+    >
+      <div
+        class="fixed inset-0 pointer-events-none scanline opacity-30 z-0"
+      ></div>
+      <div class="mb-12 text-center relative z-10">
+        <h2
+          class="font-headline font-bold text-3xl tracking-tighter mb-2 glow-text-cyan"
+        >
+          Pattern Recognition #842
+        </h2>
+        <p class="font-label text-slate-400 text-sm tracking-widest uppercase">
+          Analyze activity curve for potential lateral escalation
+        </p>
+      </div>
+      <div
+        class="w-full flex-grow flex items-center justify-center relative z-10 mb-12"
+      >
+        <div
+          class="w-full h-full max-h-[400px] border border-white/5 bg-[#0d0d1a] relative chart-container flex items-center justify-center group"
+        >
+          <svg
+            id="chart-svg"
+            class="w-full h-full preserve-3d"
+            preserveaspectratio="none"
+            viewbox="0 0 1000 400"
+          >
+            <path
+              class="drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]"
+              d="M0,350 L100,345 L200,352 L300,340 L400,348 L450,200 L460,250 L480,120 L500,180 L520,40 L550,220 L600,342 L700,350 L800,345 L900,355 L1000,348"
+              fill="none"
+              stroke="white"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            ></path>
+            <g id="chart-annotations"></g>
+          </svg>
+          <div
+            class="absolute top-0 left-0 w-8 h-8 border-t border-l border-[#00ffcc]/40"
+          ></div>
+          <div
+            class="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-[#00ffcc]/40"
+          ></div>
+        </div>
+      </div>
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl relative z-10"
+      >
+        <button
+          id="red"
+          class="group relative overflow-hidden bg-[#0a0a12] border border-[#ff2d78]/40 px-8 py-6 transition-all hover:bg-[#ff2d78]/5 hover:border-[#ff2d78] hover:shadow-[0_0_20px_rgba(255,45,120,0.3)] active:scale-[0.98]"
+        >
+          <div class="flex items-center justify-between">
+            <div class="text-left">
+              <span
+                class="block font-headline font-bold text-xl text-[#ff2d78] glow-text-pink"
+                >CRITICAL ALERT</span
+              >
+            </div>
+            <span
+              class="material-symbols-outlined text-[#ff2d78] text-3xl group-hover:translate-x-1 transition-transform"
+              data-icon="security_update_warning"
+              >security_update_warning</span
+            >
+          </div>
+          <div
+            class="absolute bottom-0 left-0 h-[1px] w-0 bg-[#ff2d78] group-hover:w-full transition-all duration-500"
+          ></div>
+        </button>
+        <button
+          id="green"
+          class="group relative overflow-hidden bg-[#0a0a12] border border-white/20 px-8 py-6 transition-all hover:bg-white/5 hover:border-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-[0.98]"
+        >
+          <div class="flex items-center justify-between">
+            <div class="text-left">
+              <span class="block font-headline font-bold text-xl text-white"
+                >ACCEPTABLE ACTIVITY</span
+              >
+            </div>
+            <span
+              class="material-symbols-outlined text-white text-3xl group-hover:translate-x-1 transition-transform"
+              data-icon="verified_user"
+              >verified_user</span
+            >
+          </div>
+          <div
+            class="absolute bottom-0 left-0 h-[1px] w-0 bg-white group-hover:w-full transition-all duration-500"
+          ></div>
+        </button>
+      </div>
+
+      <div class="mt-8 flex gap-4 z-10">
+        <button
+          id="hint-btn"
+          class="px-6 py-2 border border-[#00ffcc]/50 text-[#00ffcc] font-label text-xs uppercase tracking-widest hover:bg-[#00ffcc]/10 transition-colors"
+        >
+          Hint
+        </button>
+        <button
+          id="next-btn"
+          class="px-8 py-2 bg-[#00ffcc] text-[#0a0a12] font-headline font-bold uppercase tracking-tighter hover:bg-[#00edbd] transition-colors shadow-[0_0_15px_rgba(0,255,204,0.4)]"
+        >
+          Next Analysis
+        </button>
+      </div>
+      <div
+        class="mt-12 w-full max-w-4xl bg-surface-container-lowest/5 border border-[#00ffcc]/30 p-6 flex gap-6 items-start"
+      >
+        <div
+          class="flex-shrink-0 w-12 h-12 bg-[#00ffcc]/10 flex items-center justify-center rounded-full"
+        >
+          <span
+            class="material-symbols-outlined text-[#00ffcc] text-2xl"
+            data-icon="psychology"
+            style="font-variation-settings: 'FILL' 1"
+            >psychology</span
+          >
+        </div>
+        <div id="hint">
+          <h4
+            class="font-headline font-bold text-[#00ffcc] text-lg mb-1 glow-text-cyan uppercase tracking-tight"
+          >
+            Tactical Insight
+          </h4>
+          <p class="text-slate-300 text-sm leading-relaxed font-body">
+            <span class="text-white font-semibold">Correct choice logic:</span>
+            This specific spike profile shows a multi-stage escalation typical
+            of lateral movement. Note the secondary "echo" peaks at 550ms which
+            differentiate it from standard automated backups that maintain a
+            flat saturation plateau.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Elements
+        const redBtn = document.getElementById("red");
+        const greenBtn = document.getElementById("green");
+        const hintBtn = document.getElementById("hint-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const hintContent = document.getElementById("hint");
+        const annotationGroup = document.getElementById("chart-annotations");
+
+        // 1. Green Button Styling Update (Task: White to Green)
+        const greenLabel = greenBtn.querySelector("span.block");
+        const greenIcon = greenBtn.querySelector(".material-symbols-outlined");
+        greenBtn.style.borderColor = "#00ffcc";
+        greenLabel.style.color = "#00ffcc";
+        greenIcon.style.color = "#00ffcc";
+        greenBtn.classList.add(
+          "hover:bg-[#00ffcc]/5",
+          "hover:border-[#00ffcc]",
+          "hover:shadow-[0_0_20px_rgba(0,255,204,0.2)]"
+        );
+        greenBtn.querySelector('div[class*="bg-white"]').className =
+          "absolute bottom-0 left-0 h-[1px] w-0 bg-[#00ffcc] group-hover:w-full transition-all duration-500";
+
+        // 2. Hint Button Logic
+        hintBtn.addEventListener("click", () => {
+          hintContent.style.display = "block";
+        });
+
+        // 3. Decision Buttons Behavior
+        const handleDecision = (type) => {
+          // Show Next Button
+          nextBtn.style.display = "block";
+
+          // Update Chart with Visual Annotations
+          const color = "#ff2d78";
+          annotationGroup.innerHTML = `
+            <circle cx="520" cy="40" r="8" fill="none" stroke="${color}" stroke-width="2">
+              <animate attributeName="r" from="8" to="15" dur="1s" repeatCount="indefinite" />
+              <animate attributeName="opacity" from="1" to="0" dur="1s" repeatCount="indefinite" />
+            </circle>
+            <text x="540" y="35" fill="${color}" font-family="Space Grotesk" font-size="12" font-weight="bold">ANOMALY DETECTED</text>
+            <line x1="520" y1="40" x2="520" y2="380" stroke="${color}" stroke-width="1" stroke-dasharray="4" />
+          `;
+        };
+
+        redBtn.addEventListener("click", () => handleDecision("red"));
+        greenBtn.addEventListener("click", () => handleDecision("green"));
+
+        // 4. Next Button logic (Optional: reset state)
+        nextBtn.addEventListener("click", () => {
+          nextBtn.style.display = "none";
+          hintContent.style.display = "none";
+          annotationGroup.innerHTML = "";
+        });
+      });
+    </script>
+  </body>
+</html>

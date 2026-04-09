@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOC Onboarding | Comparateur d'Environnements</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+      .glass-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .input-field {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid #334155;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .input-field:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+      .diff-red {
+        color: #f87171;
+        background: rgba(248, 113, 113, 0.1);
+      }
+      .match-green {
+        color: #4ade80;
+        background: rgba(74, 222, 128, 0.1);
+      }
+    </style>
+  </head>
+  <body class="p-4 md:p-8">
+    <header class="max-w-6xl mx-auto mb-8 flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-blue-400 flex items-center gap-2">
+          <i data-lucide="shield-check"></i> SOC Analyst Transition
+        </h1>
+        <p class="text-slate-400">
+          Analyse comparative des écosystèmes de sécurité
+        </p>
+      </div>
+      <div class="text-right hidden md:block">
+        <span class="text-xs font-mono text-slate-500 uppercase tracking-widest"
+          >Status: Ready</span
+        >
+        <div class="h-1 w-32 bg-blue-500/20 mt-1 rounded-full overflow-hidden">
+          <div class="h-full bg-blue-500 w-full animate-pulse"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto space-y-8">
+      <div class="grid md:grid-cols-2 gap-8">
+        <section class="glass-card p-6 rounded-xl">
+          <div
+            class="flex items-center gap-3 mb-6 border-b border-slate-700 pb-3"
+          >
+            <i data-lucide="history" class="text-slate-400"></i>
+            <h2 class="text-xl font-semibold">Anciennes Habitudes (Legacy)</h2>
+          </div>
+
+          <div class="space-y-4" id="old-soc-form">
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Outils (SIEM, EDR...)</label
+              >
+              <input
+                type="text"
+                data-key="tools"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Splunk, Crowdstrike..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Alertes Fréquentes</label
+              >
+              <input
+                type="text"
+                data-key="alerts"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Phishing, Brute force..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Processus Incident</label
+              >
+              <input
+                type="text"
+                data-key="process"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Escalade N3 manuelle..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Niveaux de Priorité</label
+              >
+              <input
+                type="text"
+                data-key="priority"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: L/M/H/Critical..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Playbooks / Réponses</label
+              >
+              <input
+                type="text"
+                data-key="playbooks"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Scripts Python isolés..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Indicateurs (IOCs)</label
+              >
+              <input
+                type="text"
+                data-key="iocs"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: IPs, Hashes de fichiers..."
+              />
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="glass-card p-6 rounded-xl border-blue-500/30 shadow-lg shadow-blue-500/5"
+        >
+          <div
+            class="flex items-center gap-3 mb-6 border-b border-slate-700 pb-3"
+          >
+            <i data-lucide="zap" class="text-blue-400"></i>
+            <h2 class="text-xl font-semibold">Nouvelle Entreprise (Current)</h2>
+          </div>
+
+          <div class="space-y-4" id="new-soc-form">
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Outils Actuels</label
+              >
+              <input
+                type="text"
+                data-key="tools"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Sentinel, Defender..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Types d'Alertes</label
+              >
+              <input
+                type="text"
+                data-key="alerts"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Identité, Cloud App..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Processus Internes</label
+              >
+              <input
+                type="text"
+                data-key="process"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Automatisation SOAR..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Criticité</label
+              >
+              <input
+                type="text"
+                data-key="priority"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: 1 à 5..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Réponses Incident</label
+              >
+              <input
+                type="text"
+                data-key="playbooks"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: Isolation auto via EDR..."
+              />
+            </div>
+            <div>
+              <label class="text-xs font-semibold uppercase text-slate-500"
+                >Indicateurs Surveillés</label
+              >
+              <input
+                type="text"
+                data-key="iocs"
+                class="input-field w-full p-3 rounded mt-1"
+                placeholder="ex: TTPs, Comportements..."
+              />
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="flex flex-col items-center gap-4">
+        <button
+          onclick="compareEnvironments()"
+          class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-full font-bold flex items-center gap-3 transition-transform active:scale-95 shadow-xl shadow-blue-600/20"
+        >
+          <i data-lucide="git-compare"></i> COMPARER LES ENVIRONNEMENTS
+        </button>
+      </div>
+
+      <div
+        id="results-section"
+        class="hidden space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500"
+      >
+        <div class="glass-card p-6 rounded-xl border-l-4 border-blue-500">
+          <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart-3"></i> Analyse des Écarts
+          </h3>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            id="comparison-grid"
+          ></div>
+
+          <div
+            class="mt-8 p-4 bg-slate-900/50 rounded-lg border border-slate-700"
+          >
+            <h4 class="text-sm font-semibold text-blue-400 uppercase mb-2">
+              Résumé Exécutif
+            </h4>
+            <p id="summary-text" class="text-slate-300 leading-relaxed italic">
+              Veuillez remplir les champs pour générer une synthèse automatique.
+            </p>
+          </div>
+
+          <div class="mt-6 flex justify-end">
+            <button
+              onclick="exportReport()"
+              class="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+            >
+              <i data-lucide="download" size="16"></i> Exporter le rapport
+              (.txt)
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Initialisation des icônes
+      lucide.createIcons();
+
+      function compareEnvironments() {
+        const oldFields = document.querySelectorAll("#old-soc-form input");
+        const newFields = document.querySelectorAll("#new-soc-form input");
+        const grid = document.getElementById("comparison-grid");
+        const resultsSection = document.getElementById("results-section");
+
+        grid.innerHTML = ""; // Reset
+        resultsSection.classList.remove("hidden");
+
+        let differencesCount = 0;
+        const labels = {
+          tools: "Outils & Stack",
+          alerts: "Vecteurs d'Alertes",
+          process: "Workflow Incident",
+          priority: "Modèle de Priorité",
+          playbooks: "Capacités de Réponse",
+          iocs: "Indicateurs Clés",
+        };
+
+        oldFields.forEach((field, index) => {
+          const key = field.getAttribute("data-key");
+          const oldVal = field.value || "Non spécifié";
+          const newVal = newFields[index].value || "Non spécifié";
+          const isDifferent =
+            oldVal.toLowerCase().trim() !== newVal.toLowerCase().trim();
+
+          if (isDifferent) differencesCount++;
+
+          const card = document.createElement("div");
+          card.className = `p-4 rounded-lg border ${
+            isDifferent ? "border-red-500/30" : "border-green-500/30"
+          } bg-slate-800/40`;
+          card.innerHTML = `
+                    <div class="text-xs font-bold text-slate-500 mb-2 uppercase">${
+                      labels[key]
+                    }</div>
+                    <div class="flex flex-col gap-2">
+                        <div class="text-sm line-through opacity-50">${oldVal}</div>
+                        <div class="text-md font-medium ${
+                          isDifferent ? "text-red-400" : "text-green-400"
+                        }">
+                            ${newVal}
+                        </div>
+                    </div>
+                `;
+          grid.appendChild(card);
+        });
+
+        // Génération du résumé
+        const summary = document.getElementById("summary-text");
+        if (differencesCount > 4) {
+          summary.innerText =
+            "Changement majeur d'écosystème détecté. Une phase d'acculturation profonde aux nouveaux outils et processus est nécessaire. Priorité : Maîtrise du workflow de réponse.";
+        } else if (differencesCount > 0) {
+          summary.innerText =
+            "L'environnement présente des similitudes structurelles. Concentrez-vous sur l'adaptation des spécificités techniques et des nouveaux playbooks.";
+        } else {
+          summary.innerText =
+            "Les environnements semblent identiques. La transition devrait être immédiate sans friction opérationnelle.";
+        }
+
+        window.scrollTo({
+          top: resultsSection.offsetTop - 20,
+          behavior: "smooth",
+        });
+      }
+
+      function exportReport() {
+        let content = "RAPPORT DE TRANSITION SOC ANALYST\n";
+        content += "==================================\n\n";
+
+        const oldFields = document.querySelectorAll("#old-soc-form input");
+        const newFields = document.querySelectorAll("#new-soc-form input");
+
+        oldFields.forEach((field, index) => {
+          const label = field.parentElement.querySelector("label").innerText;
+          content += `${label}:\n`;
+          content += ` - Ancien: ${field.value || "N/A"}\n`;
+          content += ` - Nouveau: ${newFields[index].value || "N/A"}\n\n`;
+        });
+
+        content +=
+          "Résumé: " + document.getElementById("summary-text").innerText;
+
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Comparaison_SOC_Onboarding.txt";
+        a.click();
+      }
+    </script>
+  </body>
+</html>
+Poser un nombre de questions une à la fois avec sa propre expérience par
+l'entreprise (il connait de toute façon pas) fin : prend chaque réponse et
+compare = cf le tableau sur teams : bleu idem ; rouge c'est pire ici ; vert
+c'est mieux changer le tableau que j'ai sous forme de questions (supprimer
+entreprise)
