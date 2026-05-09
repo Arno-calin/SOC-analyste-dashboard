@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>NEON SENTINEL | Global Threat Map</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space_Grotesk:wght@300;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .neon-glow-pink {
+        text-shadow: 0 0 8px #ff2d78;
+      }
+      .neon-glow-cyan {
+        text-shadow: 0 0 8px #00ffcc;
+      }
+      .neon-border-pink {
+        border: 1px solid rgba(255, 45, 120, 0.5);
+        box-shadow: inset 0 0 12px rgba(255, 45, 120, 0.1);
+      }
+      .neon-border-cyan {
+        border: 1px solid rgba(0, 255, 204, 0.3);
+        box-shadow: inset 0 0 12px rgba(0, 255, 204, 0.05);
+      }
+
+      /* Grid Overlay */
+      .cyber-grid {
+        background-image: linear-gradient(
+            rgba(0, 255, 204, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+
+      body {
+        background-color: #0a0a12;
+        color: #f8f5ff;
+        font-family: "Inter", sans-serif;
+        overflow: hidden;
+      }
+
+      .map-container {
+        position: relative;
+        background-color: #05050a;
+        overflow: hidden;
+        cursor: grab;
+      }
+
+      .map-container:active {
+        cursor: grabbing;
+      }
+
+      .map-wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.1s ease-out;
+      }
+
+      .map-dot {
+        position: absolute;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .map-dot:hover {
+        transform: translate(-50%, -50%) scale(1.2);
+        z-index: 50;
+      }
+
+      /* Scanline animation */
+      @keyframes scan {
+        from {
+          transform: translateY(-100vh);
+        }
+        to {
+          transform: translateY(100vh);
+        }
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #0a0a12;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #1c1c2b;
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #ff2d78;
+      }
+    </style>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-dim": "#005b47",
+              "on-tertiary-fixed-variant": "#695900",
+              background: "#0a0a12",
+              "tertiary-container": "#fedf49",
+              tertiary: "#6b5b00",
+              "surface-container-lowest": "#05050a",
+              "on-primary": "#ffeff0",
+              "primary-fixed-dim": "#ff5486",
+              "outline-variant": "#acaac6",
+              "surface-container-highest": "#1c1c2b",
+              "on-surface": "#f8f5ff",
+              primary: "#ff2d78",
+              "tertiary-fixed-dim": "#efd13b",
+              "on-tertiary-fixed": "#483d00",
+              "surface-dim": "#0a0a12",
+              "on-secondary-fixed": "#004737",
+              "on-background": "#f8f5ff",
+              "tertiary-dim": "#5d4f00",
+              "surface-bright": "#151525",
+              surface: "#0a0a12",
+              "inverse-primary": "#ff4c83",
+              "on-tertiary": "#fff3c8",
+              "tertiary-fixed": "#fedf49",
+              "secondary-container": "#00fcca",
+              "inverse-on-surface": "#9c9ab6",
+              "on-secondary": "#c5ffe9",
+              "secondary-fixed": "#00fcca",
+              "on-primary-fixed": "#000000",
+              "on-error-container": "#570008",
+              "surface-container-low": "#0f0f1a",
+              "surface-container": "#151525",
+              "on-primary-container": "#4d001d",
+              "surface-tint": "#ff2d78",
+              "inverse-surface": "#f8f5ff",
+              "on-surface-variant": "#acaac6",
+              "on-primary-fixed-variant": "#5e0025",
+              "primary-container": "#ff7195",
+              "secondary-fixed-dim": "#00edbd",
+              "on-error": "#ffefee",
+              outline: "#75748e",
+              "error-dim": "#9f0519",
+              "surface-variant": "#1c1c2b",
+              error: "#b31b25",
+              "on-secondary-container": "#005b47",
+              "error-container": "#fb5151",
+              "surface-container-high": "#232338",
+              "primary-fixed": "#ff7195",
+              "on-tertiary-container": "#5e4f00",
+              secondary: "#00ffcc",
+              "primary-dim": "#a00044",
+              "on-secondary-fixed-variant": "#006650",
+            },
+            fontFamily: {
+              headline: ["Sora"],
+              body: ["Inter"],
+              label: ["Space Grotesk"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-background text-on-background">
+    <!-- TopNavBar -->
+    <header
+      class="bg-[#0a0a12] border-b border-[#ff2d78]/30 shadow-[0_4px_12px_rgba(255,45,120,0.15)] flex justify-between items-center w-full px-6 py-3 fixed top-0 z-50"
+    >
+      <div class="flex items-center gap-8">
+        <h1
+          class="text-2xl font-bold tracking-tighter text-[#ff2d78] drop-shadow-[0_0_8px_rgba(255,45,120,0.8)] font-headline"
+        >
+          CyberSentinel SOC
+        </h1>
+        <nav
+          class="hidden md:flex items-center gap-6 font-label text-xs uppercase tracking-widest"
+        >
+          <a
+            class="text-slate-400 hover:text-slate-200 transition-colors"
+            href="#"
+            >Dashboard</a
+          >
+          <a
+            class="text-[#ff2d78] border-b-2 border-[#ff2d78] pb-1 transition-all"
+            href="#"
+            >IP origin</a
+          >
+          <a
+            class="text-slate-400 hover:text-slate-200 transition-colors"
+            href="#"
+            >Habit request flux</a
+          >
+          <a
+            class="text-slate-400 hover:text-slate-200 transition-colors"
+            href="#"
+            >Quizz diff</a
+          >
+          <a
+            class="text-slate-400 hover:text-slate-200 transition-colors"
+            href="#"
+            >Blind test</a
+          >
+        </nav>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative hidden lg:block">
+          <span
+            class="absolute inset-y-0 left-3 flex items-center text-slate-500"
+          >
+            <span class="material-symbols-outlined text-sm">search</span>
+          </span>
+          <input
+            class="bg-surface-container border-none focus:ring-1 focus:ring-primary text-xs font-label py-2 pl-10 pr-4 w-64 rounded-sm"
+            placeholder="SEARCH SYSTEM..."
+            type="text"
+          />
+        </div>
+        <button
+          class="text-slate-400 hover:text-[#00ffcc] hover:drop-shadow-[0_0_5px_rgba(0,255,204,0.6)] active:scale-95 duration-150 ease-in-out"
+        >
+          <span class="material-symbols-outlined" data-icon="notifications"
+            >notifications</span
+          >
+        </button>
+        <button
+          class="text-slate-400 hover:text-[#00ffcc] hover:drop-shadow-[0_0_5px_rgba(0,255,204,0.6)] active:scale-95 duration-150 ease-in-out"
+        >
+          <span class="material-symbols-outlined" data-icon="settings"
+            >settings</span
+          >
+        </button>
+        <div
+          class="w-8 h-8 rounded-full border border-primary/50 overflow-hidden"
+        >
+          <img
+            alt="Analyst Profile"
+            class="w-full h-full object-cover"
+            data-alt="Close up portrait of a serious cyber security analyst with neon blue lighting reflecting on their face in a dark room"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEd_rDfnm4CxxNl6LpsYMKWrfLN5C3de8bi_ujoVCa36QyDITn42v-IP3UK7t08iWC_r7saFCYGY3RVLzAf4m9NYPiCN1PNBlC7wPdwGLhLdZ-7TUNHujYFy3zTF4tZAGvAQ58CD6QjncY43hKyjeCGs_UYI9-3oizpJjNOSg8ReGVFjDcDZuOfjQ1lTDQjMu0ZVtagGZMtHUqdHS0LRCMdYXTTb0zIyri8mAoHOWtwRHjvoe68BD3VWnl9z-MOtZtlN47qs4AYF4"
+          />
+        </div>
+      </div>
+    </header>
+    <!-- SideNavBar -->
+    <aside
+      class="bg-[#0a0a12]/80 border-r border-[#00ffcc]/20 fixed left-0 top-16 h-[calc(100vh-64px)] w-56 flex flex-col pt-8 z-40"
+    >
+      <div class="px-5 mb-8">
+        <h2 class="text-[#ff2d78] font-bold font-headline text-base">
+          Region of the world
+        </h2>
+      </div>
+      <nav class="flex-1 space-y-1">
+        <div
+          class="bg-[#00ffcc]/10 text-[#00ffcc] border-l-4 border-[#00ffcc] shadow-[0_0_10px_rgba(0,255,204,0.2)] px-5 py-3 flex items-center gap-4 cursor-pointer transition-all duration-300 ease-out"
+        >
+          <span class="material-symbols-outlined text-sm" data-icon="security"
+            >shield</span
+          >
+          <span class="font-label uppercase tracking-widest text-xs"
+            >Global</span
+          >
+        </div>
+        <div
+          class="text-slate-500 hover:bg-slate-800/50 hover:border-r-2 hover:border-[#ffe04a] px-5 py-3 flex items-center gap-4 cursor-pointer transition-all duration-300 ease-out"
+        >
+          <span class="material-symbols-outlined text-sm">security</span>
+          <span class="font-label uppercase tracking-widest text-xs"
+            >Europe</span
+          >
+        </div>
+        <div
+          class="text-slate-500 hover:bg-slate-800/50 hover:border-r-2 hover:border-[#ffe04a] px-5 py-3 flex items-center gap-4 cursor-pointer transition-all duration-300 ease-out"
+        >
+          <span class="material-symbols-outlined text-sm" data-icon="shield"
+            >shield</span
+          >
+          <span class="font-label uppercase tracking-widest text-xs"
+            >North America</span
+          >
+        </div>
+        <div
+          class="text-slate-500 hover:bg-slate-800/50 hover:border-r-2 hover:border-[#ffe04a] px-5 py-3 flex items-center gap-4 cursor-pointer transition-all duration-300 ease-out"
+        >
+          <span class="material-symbols-outlined text-sm" data-icon="shield"
+            >security</span
+          >
+          <span class="font-label uppercase tracking-widest text-xs"
+            >South America</span
+          >
+        </div>
+        <div
+          class="text-slate-500 hover:bg-slate-800/50 hover:border-r-2 hover:border-[#ffe04a] px-5 py-3 flex items-center gap-4 cursor-pointer transition-all duration-300 ease-out"
+        >
+          <span class="material-symbols-outlined text-sm" data-icon="router"
+            >shield</span
+          >
+          <span class="font-label uppercase tracking-widest text-xs">Asia</span>
+        </div>
+        <div
+          class="text-slate-500 hover:bg-slate-800/50 hover:border-r-2 hover:border-[#ffe04a] px-5 py-3 flex items-center gap-4 cursor-pointer transition-all duration-300 ease-out"
+        >
+          <span class="material-symbols-outlined text-sm" data-icon="router"
+            >shield</span
+          >
+          <span class="font-label uppercase tracking-widest text-xs"
+            >Oceania</span
+          >
+        </div>
+        <div
+          class="text-slate-500 hover:bg-slate-800/50 hover:border-r-2 hover:border-[#ffe04a] px-5 py-3 flex items-center gap-4 cursor-pointer transition-all duration-300 ease-out"
+        >
+          <span
+            class="material-symbols-outlined text-sm"
+            data-icon="Troubleshoot"
+            >shield</span
+          >
+          <span class="font-label uppercase tracking-widest text-xs"
+            >Africa</span
+          >
+        </div>
+      </nav>
+      <div class="p-5 mt-auto border-t border-outline-variant/30">
+        <div class="space-y-3">
+          <div
+            class="flex items-center gap-3 text-slate-500 hover:text-on-surface cursor-pointer"
+          >
+            <span class="material-symbols-outlined text-sm" data-icon="help"
+              >help</span
+            >
+            <span class="font-label text-xs uppercase tracking-widest"
+              >Support</span
+            >
+          </div>
+          <div
+            class="flex items-center gap-3 text-slate-500 hover:text-on-surface cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-sm"
+              data-icon="description"
+              >description</span
+            >
+            <span class="font-label text-xs uppercase tracking-widest"
+              >Documentation</span
+            >
+          </div>
+        </div>
+      </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="ml-64 mt-16 h-[calc(100vh-64px)] flex overflow-hidden">
+      <!-- 2D World Map Projection -->
+      <section class="flex-1 map-container cyber-grid relative">
+        <div
+          class="map-wrapper"
+          id="map-wrapper"
+          style="transform: scale(1) translate(0, 0)"
+        >
+          <!-- Flat World Map Background -->
+          <div class="absolute inset-0 flex items-center justify-center p-12">
+            <img
+              alt="2D World Map Projection"
+              class="w-full h-full object-contain opacity-30 contrast-125 saturate-0 mix-blend-screen"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuASS-aHcLjGOf8XXcAFeKfTuMcz7qEA_j2KmRkfT_I700aPnov2uf9JbSAXfJ9b4zwRVtwlqNrrRXYq0FpnwMYusOFJWpyx2jOqwZ_h3bjxa06niUPDlMOj5F__E8m4x7V3HJ8M6H1SGs5x2tAoycfWco2LUcyaDrrvEI-GC7FYF6cyd6T-EyZVVYGPQyTd-VBy-miaeQwQjpKPmAd3iK4FFr70_VFAqN3veXmUcvSheIH3S0DN5XEaqBvDCsNim2alcP6Lj3xNrZY"
+            />
+          </div>
+          <!-- Interactive Data Bubbles (Geographically Positioned for 2D Projection) -->
+          <!-- USA East (Critical) -->
+          <div
+            class="map-dot w-14 h-14 bg-purple-600/30 border-2 border-purple-500 shadow-[0_0_20px_#9333ea] flex items-center justify-center cursor-pointer group"
+            style="top: 38%; left: 24%"
+          >
+            <div
+              class="absolute bg-surface-container border border-purple-500 p-3 rounded-lg w-56 -top-36 left-1/2 -translate-x-1/2 z-50 shadow-2xl backdrop-blur-md"
+            >
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-headline font-bold text-xs text-purple-400">
+                  USA_EAST_04
+                </h4>
+                <span class="text-[8px] bg-purple-500/20 px-1 text-purple-300"
+                  >NORTH AMERICA</span
+                >
+              </div>
+              <p
+                class="font-label text-[10px] text-on-surface-variant mb-2 uppercase"
+              >
+                Status: Critical Breach
+              </p>
+              <div class="space-y-1 text-[10px]">
+                <div class="flex justify-between">
+                  <span class="text-slate-400 uppercase tracking-tighter"
+                    >Volume:</span
+                  >
+                  <span class="text-white font-bold">1.2M req/min</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400 uppercase tracking-tighter"
+                    >Anomaly:</span
+                  >
+                  <span class="text-purple-400 font-bold">92.4%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400 uppercase tracking-tighter"
+                    >Alerts:</span
+                  >
+                  <span class="text-white font-bold">14,209</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Europe (Suspicious) -->
+          <div
+            class="map-dot w-10 h-10 bg-tertiary/20 border-2 border-tertiary shadow-[0_0_12px_#ffe04a] cursor-pointer group"
+            style="top: 33%; left: 51%"
+          >
+            <div
+              class="absolute invisible group-hover:visible bg-surface-container border border-tertiary p-3 rounded-lg w-56 -top-36 left-1/2 -translate-x-1/2 z-50 shadow-2xl backdrop-blur-md"
+            >
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-headline font-bold text-xs text-tertiary">
+                  EURO_NODE_09
+                </h4>
+                <span class="text-[8px] bg-tertiary/20 px-1 text-tertiary"
+                  >EUROPE</span
+                >
+              </div>
+              <p
+                class="font-label text-[10px] text-on-surface-variant mb-2 uppercase"
+              >
+                Status: Suspicious Activity
+              </p>
+              <div class="space-y-1 text-[10px]">
+                <div class="flex justify-between">
+                  <span class="text-slate-400 uppercase tracking-tighter"
+                    >Volume:</span
+                  >
+                  <span class="text-white font-bold">450K req/min</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400 uppercase tracking-tighter"
+                    >Anomaly:</span
+                  >
+                  <span class="text-tertiary font-bold">45.1%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Asia (Anomalous) -->
+          <div
+            class="map-dot w-20 h-20 bg-primary/20 border-2 border-primary shadow-[0_0_25px_#ff2d78] cursor-pointer group"
+            style="top: 42%; left: 78%"
+          >
+            <div
+              class="absolute invisible group-hover:visible bg-surface-container border border-primary p-3 rounded-lg w-56 -top-36 left-1/2 -translate-x-1/2 z-50 shadow-2xl backdrop-blur-md"
+            >
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-headline font-bold text-xs text-primary">
+                  APAC_PRIMARY_01
+                </h4>
+                <span class="text-[8px] bg-primary/20 px-1 text-primary"
+                  >ASIA PACIFIC</span
+                >
+              </div>
+              <p
+                class="font-label text-[10px] text-on-surface-variant mb-2 uppercase"
+              >
+                Status: Anomalous Flow
+              </p>
+              <div class="space-y-1 text-[10px]">
+                <div class="flex justify-between">
+                  <span class="text-slate-400 uppercase tracking-tighter"
+                    >Volume:</span
+                  >
+                  <span class="text-white font-bold">2.8M req/min</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400 uppercase tracking-tighter"
+                    >Anomaly:</span
+                  >
+                  <span class="text-primary font-bold">78.9%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- South America (Normal) -->
+          <div
+            class="map-dot w-8 h-8 bg-secondary/20 border-2 border-secondary shadow-[0_0_10px_#00ffcc] cursor-pointer group"
+            style="top: 72%; left: 34%"
+          >
+            <div
+              class="absolute invisible group-hover:visible bg-surface-container border border-secondary p-3 rounded-lg w-56 -top-36 left-1/2 -translate-x-1/2 z-50 shadow-2xl backdrop-blur-md"
+            >
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-headline font-bold text-xs text-secondary">
+                  LATAM_HUB_02
+                </h4>
+                <span class="text-[8px] bg-secondary/20 px-1 text-secondary"
+                  >LATIN AMER</span
+                >
+              </div>
+              <p
+                class="font-label text-[10px] text-on-surface-variant mb-2 uppercase"
+              >
+                Status: Normal Ops
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Map Controls Overlay -->
+        <div class="absolute top-6 right-6 flex flex-col gap-2">
+          <button
+            class="w-10 h-10 bg-surface-container border border-white/10 hover:border-[#00ffcc]/50 transition-all text-slate-400 hover:text-[#00ffcc] flex items-center justify-center"
+            onclick="zoomMap(1.2)"
+          >
+            <span class="material-symbols-outlined">add</span>
+          </button>
+          <button
+            class="w-10 h-10 bg-surface-container border border-white/10 hover:border-[#00ffcc]/50 transition-all text-slate-400 hover:text-[#00ffcc] flex items-center justify-center"
+            onclick="zoomMap(0.8)"
+          >
+            <span class="material-symbols-outlined">remove</span>
+          </button>
+          <button
+            class="w-10 h-10 bg-surface-container border border-white/10 hover:border-[#00ffcc]/50 transition-all text-slate-400 hover:text-[#00ffcc] flex items-center justify-center"
+            onclick="resetMap()"
+          >
+            <span class="material-symbols-outlined">refresh</span>
+          </button>
+        </div>
+        <!-- Legend Overlay -->
+        <div
+          class="absolute bottom-6 left-6 flex gap-4 p-4 bg-surface-container/80 backdrop-blur-md neon-border-cyan rounded-sm"
+        >
+          <div class="flex items-center gap-2">
+            <div
+              class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_4px_#00ffcc]"
+            ></div>
+            <span class="text-[10px] font-label uppercase text-slate-400"
+              >Normal</span
+            >
+          </div>
+          <div class="flex items-center gap-2">
+            <div
+              class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_4px_#ffe04a]"
+            ></div>
+            <span class="text-[10px] font-label uppercase text-slate-400"
+              >Suspicious</span
+            >
+          </div>
+          <div class="flex items-center gap-2">
+            <div
+              class="w-2 h-2 rounded-full bg-primary shadow-[0_0_4px_#ff2d78]"
+            ></div>
+            <span class="text-[10px] font-label uppercase text-slate-400"
+              >Anomalous</span
+            >
+          </div>
+          <div class="flex items-center gap-2">
+            <div
+              class="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_4px_#a855f7]"
+            ></div>
+            <span class="text-[10px] font-label uppercase text-slate-400"
+              >Critical</span
+            >
+          </div>
+        </div>
+      </section>
+      <!-- Right Side Panel -->
+      <aside
+        class="w-80 bg-surface-container-low border-l border-[#ff2d78]/20 flex flex-col"
+      >
+        <!-- Control Header -->
+        <div
+          class="bg-surface-container border border-outline-variant/30 p-5 rounded-sm"
+        >
+          <h3
+            class="font-label text-[10px] font-bold uppercase tracking-widest text-secondary mb-3 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-xs"
+              >calendar_month</span
+            >
+            Date Range
+          </h3>
+          <div class="space-y-2 flex">
+            <div
+              class="p-3 bg-background/50 border border-outline-variant/20 rounded-sm"
+            >
+              <div class="text-[10px] text-slate-500 font-label uppercase">
+                Start Date
+              </div>
+              <div class="text-xs font-label">JAN 01, 2025</div>
+            </div>
+            <div
+              class="p-3 bg-background/50 border border-outline-variant/20 rounded-sm"
+            >
+              <div class="text-[10px] text-slate-500 font-label uppercase">
+                End Date
+              </div>
+              <div class="text-xs font-label">DEC 31, 2025</div>
+            </div>
+          </div>
+        </div>
+        <!-- Top Threat Origins -->
+        <div class="flex-1 p-6 overflow-y-auto custom-scrollbar">
+          <div class="flex justify-between items-center mb-4">
+            <h3
+              class="font-headline font-bold text-xs uppercase text-slate-300"
+            >
+              Top Threat Origins
+            </h3>
+            <span class="material-symbols-outlined text-sm text-[#ff2d78]"
+              >warning</span
+            >
+          </div>
+          <div class="space-y-3">
+            <div
+              class="p-3 bg-primary/5 border-l-2 border-primary rounded-sm group hover:bg-primary/10 transition-all cursor-pointer"
+            >
+              <div class="flex justify-between items-start mb-1">
+                <span
+                  class="text-xs font-bold text-white uppercase font-['Sora']"
+                  >Russian Federation</span
+                >
+                <span
+                  class="text-[10px] font-label text-primary px-1.5 py-0.5 border border-primary/30 rounded"
+                  >CRITICAL</span
+                >
+              </div>
+              <div class="flex justify-between items-end">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Requests</span
+                  >
+                  <span class="text-xs font-bold text-white">4,281,902</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Anomaly Level</span
+                  >
+                  <div class="w-20 h-1 bg-slate-800 mt-1">
+                    <div
+                      class="h-full bg-primary shadow-[0_0_6px_#ff2d78]"
+                      style="width: 92%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="p-3 bg-primary/5 border-l-2 border-primary rounded-sm group hover:bg-primary/10 transition-all cursor-pointer"
+            >
+              <div class="flex justify-between items-start mb-1">
+                <span
+                  class="text-xs font-bold text-white uppercase font-['Sora']"
+                  >Nigeria</span
+                >
+                <span
+                  class="text-[10px] font-label text-primary px-1.5 py-0.5 border border-primary/30 rounded"
+                  >CRITICAL</span
+                >
+              </div>
+              <div class="flex justify-between items-end">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Requests</span
+                  >
+                  <span class="text-xs font-bold text-white">81,902</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Anomaly Level</span
+                  >
+                  <div class="w-20 h-1 bg-slate-800 mt-1">
+                    <div
+                      class="h-full bg-primary shadow-[0_0_6px_#ff2d78]"
+                      style="width: 80%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="p-3 bg-tertiary/5 border-l-2 border-tertiary rounded-sm group hover:bg-tertiary/10 transition-all cursor-pointer"
+            >
+              <div class="flex justify-between items-start mb-1">
+                <span
+                  class="text-xs font-bold text-white uppercase font-['Sora']"
+                  >China</span
+                >
+                <span
+                  class="text-[10px] font-label text-tertiary px-1.5 py-0.5 border border-tertiary/30 rounded"
+                  >SUSPICIOUS</span
+                >
+              </div>
+              <div class="flex justify-between items-end">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Requests</span
+                  >
+                  <span class="text-xs font-bold text-white">2,105,443</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Anomaly Level</span
+                  >
+                  <div class="w-20 h-1 bg-slate-800 mt-1">
+                    <div
+                      class="h-full bg-tertiary shadow-[0_0_6px_#ffe04a]"
+                      style="width: 65%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="p-3 bg-surface-container border-l-2 border-slate-700 rounded-sm group hover:bg-surface-container-high transition-all cursor-pointer"
+            >
+              <div class="flex justify-between items-start mb-1">
+                <span
+                  class="text-xs font-bold text-white uppercase font-['Sora']"
+                  >Unknown Source</span
+                >
+                <span
+                  class="text-[10px] font-label text-slate-500 px-1.5 py-0.5 border border-slate-700 rounded"
+                  >MODERATE</span
+                >
+              </div>
+              <div class="flex justify-between items-end">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Requests</span
+                  >
+                  <span class="text-xs font-bold text-white">892,310</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Anomaly Level</span
+                  >
+                  <div class="w-20 h-1 bg-slate-800 mt-1">
+                    <div class="h-full bg-slate-500" style="width: 42%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="p-3 bg-surface-container border-l-2 border-slate-700 rounded-sm group hover:bg-surface-container-high transition-all cursor-pointer"
+            >
+              <div class="flex justify-between items-start mb-1">
+                <span
+                  class="text-xs font-bold text-white uppercase font-['Sora']"
+                  >Australia</span
+                >
+                <span
+                  class="text-[10px] font-label text-slate-500 px-1.5 py-0.5 border border-slate-700 rounded"
+                  >LOW</span
+                >
+              </div>
+              <div class="flex justify-between items-end">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Requests</span
+                  >
+                  <span class="text-xs font-bold text-white">457,504</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-500 uppercase"
+                    >Anomaly Level</span
+                  >
+                  <div class="w-20 h-1 bg-slate-800 mt-1">
+                    <div class="h-full bg-slate-500" style="width: 23%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Summary Footer -->
+        <div class="p-6 bg-surface-container-high border-t border-[#00ffcc]/10">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-[10px] font-label uppercase text-slate-400"
+              >Summary</span
+            >
+            <span class="text-[10px] font-label text-[#00ffcc] neon-glow-cyan"
+              >Normal</span
+            >
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-2 border border-white/5 rounded-sm">
+              <span class="block text-[8px] uppercase text-slate-500 mb-1"
+                >Total requests</span
+              >
+              <span class="text-xs font-bold text-white">14.2M</span>
+            </div>
+            <div class="p-2 border border-white/5 rounded-sm">
+              <span class="block text-[8px] uppercase text-slate-500 mb-1"
+                >Total alerts</span
+              >
+              <span class="text-xs font-bold text-primary">2,481</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+    <!-- Scanning Line Effect -->
+    <div
+      class="fixed inset-0 pointer-events-none opacity-[0.03] z-[100] h-full w-full overflow-hidden"
+    >
+      <div class="h-1 w-full bg-white animate-[scan_8s_linear_infinite]"></div>
+    </div>
+    <script>
+      let scale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      const mapWrapper = document.getElementById("map-wrapper");
+      const container = document.querySelector(".map-container");
+
+      function updateTransform() {
+        mapWrapper.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+      }
+
+      function zoomMap(factor) {
+        scale = Math.min(Math.max(scale * factor, 1), 5);
+        updateTransform();
+      }
+
+      function resetMap() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        updateTransform();
+      }
+
+      // Basic Pan functionality
+      let isDragging = false;
+      let startX, startY;
+
+      container.addEventListener("mousedown", (e) => {
+        if (scale === 1) return;
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransform();
+      });
+
+      window.addEventListener("mouseup", () => {
+        isDragging = false;
+      });
+
+      // Wheel zoom
+      container.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? 0.9 : 1.1;
+          zoomMap(delta);
+        },
+        { passive: false }
+      );
+    </script>
+  </body>
+</html>

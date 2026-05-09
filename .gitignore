@@ -1,4 +1,3 @@
-# Mettre à jour en fonction des besoins
 # Environnements virtuels Python
 venv/
 .venv/
@@ -9,9 +8,6 @@ ENV/
 .python-version
 __pycache__/
 
-# Data
+# JS
 data/
 node_modules/
-
-# Inutile
-generated/
