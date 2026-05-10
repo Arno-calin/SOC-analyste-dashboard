@@ -107,13 +107,6 @@ Les pages suivantes n'ont pas été utilisé dans la version finale mais peuvent
 
 Il y a également dans stitch des pages qui ont été générées sans jamais avoir été utilisées. Je les ai laissé au cas où elles pourraient servir, inspirer de nouvelles idées.
 
-## Lexique
-
-- pcap
-- SIEM
-- EDR
-- IDS
-
 ## Ouverture
 
 ### Retour sur la présentation orale
@@ -126,11 +119,15 @@ Il y a également dans stitch des pages qui ont été générées sans jamais av
 - Être plus précis sur ce qu'est un événement interne. Ici on parles entre autres des mises à jour et des maintenances fait par l'entreprise.
 - On peut aussi imaginer une catégorie événement interne qui prend l'origine de l'attaque, mais cela est difficile à évaluer si elle provient de l'intérieur ou de l'extérieur car, par exemple, comment classer si le hacker usurpe l'identité d'un employé.
 
-Les idées présentent dans le diaporama sont à conserver et améliorer. Une amélioration serait d'ajouter des données plus réalistes, via wireshark ou autre.
+Les idées présentent dans le diaporama sont à conserver et améliorer. Une amélioration serait d'ajouter des données plus réalistes, via wireshark ou autre en simulant des activités suspectes.
 
 ### Proposition personnelle
 
-montrer les peaks
-changer les codes couleurs pour plus de contraster entre critique et normal
+- Changer les codes couleurs pour plus de contraster entre critique et normal.
+- Ajouter un score de difficulté en fonction du niveau de criticité et d'à quel point l'alerte est évidente.
+- Ajouter plus de type de catégories pour voir si cela en devient indigeste ou utile.
+- Ajouter un espace personnel pour faire ses propres recherches et ajouter ce qui nous semble suspect.
 
-ajouter plus d'informations pertinentes sur les pages event stable et emergency + d'exmeple de blind test (utiliser wireshark sur un jour avec tentative d'intrusion pour avoir un vrai pattern)
+#### Librairie graphique js / jsx possible
+
+Layer Cake - SciChart.js - LightningChart JS - linked-charts - deck.gl - Chart.js - D3.js - C3.js - Plotly.js - Nivo - Vega / Vega-Lite - highcharts
