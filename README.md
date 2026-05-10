@@ -14,7 +14,7 @@ Les différentes versions, listées ci-dessous, représentent des pistes d'amél
 
 ### V1
 
-Cette version est un début de code réu
+Cette version est un début de code réutilisable pour créer une page interactive.
 
 #### Installation
 
