@@ -149,7 +149,7 @@ def fast(csv_name):
 @app.route("/dashboard")
 def dashboard():
     # Lecture du csv de données qui sont triés par dates
-    df = pd.read_csv("data/random_brut_data.csv")
+    df = pd.read_csv("data/generated_data.csv")
     data = df.to_dict(orient="records")
 
     alert = list(df["alert"].unique())

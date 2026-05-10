@@ -14,33 +14,48 @@ Les différentes versions, listées ci-dessous, représentent l'évolution du pr
 
 ### V1
 
+Cette version est un début de code réu
+
 #### Installation
 
-##### format des données
+Lors de la première installation :
 
-- créer un environnement python (développer)
-- installer les dépendances de requirements.txt (développer)
-- commande pour lancer le serveur
+- `python3 -m venv .venv # pour créer l'environnement python`
+- `pip install -r requirements.txt # installer les package nécessaire `
 
-#### Pipeline
+À chaque lancement :
 
-1. Récupération des données depuis wireshark sous format .csv
-1. Démarrage du serveur flask
-1. Demande d'accès à la page /data
-1. Chargement du fichier .csv
-1. Traitement des données
-1. Mise à jour du document html
-1. Création du graphique via D3.js
-1. Envoie de la page au client
+- `source .venv/bin/activate # pour lancer l'environnement python`
+- `flask --debug run # on lance le serveur python servi par app.py`
+- `deactivate # pour quitter l'environnement python`
 
-pip pour récupérer depuis requirements.txt
+#### format des données
 
-comment générer des données random
+Les données sont stockés dans un dossier data qu'il faut créer et ne pas envoyer sur github pour éviter de gérer des fichiers volumineux.
+
+##### Sources data
+
+| date       | alert | number |
+| ---------- | ----- | ------ |
+| 2025-01-01 | EDR   | 132    |
+
+- Le fichier `generator.py` permet de créer des données csv.
+- Le fichier `convertissor.py` permet de transformer des données au format pcap / npcap en csv .
+
+##### Tips event data
+
+| start      | end        | name    | type      | isDefault |
+| ---------- | ---------- | ------- | --------- | --------- |
+| 2025-01-01 | 2025-01-01 | NewYear | recurrent | True      |
+
+- Il faut le créer à la main.
 
 #### Technologies
 
-- d3.js pour les graphiques
-- flask pour le serveur python et les template html
+- <https://d3js.org/> pour les graphiques.
+  - Technologie très permissive mais demande plus de temps pour réaliser quelque chose de basique.
+- <https://flask.palletsprojects.com/en/stable/> pour le serveur python et les template html.
+  - Pratique pour la conversion puis le transfert de données.
 
 ### V2
 
@@ -54,17 +69,19 @@ commande pour récupérer node_module (démarrer un serveur vite)
 
 Cette version met l'emphase sur le frontend afin de présenter les idées clairement sans se soucier du code, mais juste du visuel.
 
+/!\ ATTENTION : ne pas reprendre le code tel quel ce n'est qu'un prototype a type démonstratif.
+
 #### Installation
 
 Aucune installation n'est recquise. Chaque pages sont auto-suffisantes et contiennent HTML, CSS et JS. Il suffit d'avoir un navigateur web.
 
-##### Technologies
+#### Technologies
 
 L'IA de google [Stich](https://stitch.withgoogle.com/) a été utilisé pour générer les pages de la `V3`.
 
 Voici le lien [où se trouve les pages générés pour la V3](https://stitch.withgoogle.com/projects/4788389111202848761). Les pages de la colonne tout à gauche sont celles qui ont été réutilisés pour le diaporama finale.
 
-La garantie d'accès au lien n'est pas garantit. Il peut être supprimé à tout moment.
+La garantie d'accès au lien n'est pas assurée. Il peut être supprimé à tout moment.
 Pour éviter cela cette archive contient [toutes les pages qui ont été générés](/V3/stitch_soc_dashboard_design.zip) avec un PNG et le code HTML pour chacune d'entre elles.
 
 Afin d'assurer la cohérence entre les pages, elles ont été modifiés grâce à l'inspecteur d'élément.
@@ -101,11 +118,15 @@ Il y a également dans stitch des pages qui ont été générées sans jamais av
 
 ### Retour sur la présentation orale
 
-ajouter précision si la source a été active ou inactive et le nombre total de sources
+- Les pages _eventStable_ et _eventEmergency_ doivent contenir plus d'informations pertinentes sur l'événement représenté plutôt que juste la courbe. Idem pour _blindTest_.
 
-être plus précis sur event interne : mise à jour, maintenance : pas un employé qui laisse une faille
+- Préciser si une source a été active ou inactive et pour quelle période
+- Ajouter le nombre total de sources.
 
-Ce qui est déjà présent dans le diaporama est à conserver
+- Être plus précis sur ce qu'est un événement interne. Ici on parles entre autres des mises à jour et des maintenances fait par l'entreprise.
+- On peut aussi imaginer une catégorie événement interne qui prend l'origine de l'attaque, mais cela est difficile à évaluer si elle provient de l'intérieur ou de l'extérieur car, par exemple, comment classer si le hacker usurpe l'identité d'un employé.
+
+Les idées présentent dans le diaporama sont à conserver et améliorer. Une amélioration serait d'ajouter des données plus réalistes, via wireshark ou autre.
 
 ### Proposition personnelle
 

@@ -18,8 +18,8 @@ parser.add_argument(
 parser.add_argument(
     "--output",
     type=str,
-    default="random_brut_data",   # valeur par défaut
-    help="Fichier d'entrée (défaut: random_brut_data)"
+    default="data/generated_data",   # valeur par défaut
+    help="Fichier de sortie (défaut: data/generated_data)"
 )
 
 args = parser.parse_args()
@@ -45,7 +45,7 @@ if args.method == "csv-brut":
 elif args.method == "pcap-realistic":
 
     # Paramètres
-    OUTPUT_FILE = "src/data/realistic_traffic_2026.pcap"
+    OUTPUT_FILE = args.output+".pcap"
     START_DATE = datetime.datetime(2026, 1, 1, 0, 0, 0)
     END_DATE = datetime.datetime(2026, 12, 31, 23, 59, 59)
 

@@ -1,6 +1,8 @@
+pip freeze pour l'environnement python de flask de la V1
+
 # Réunion
 
-on peut faire les pays 
+on peut faire les pays
 activités par parfeux
 
 ## État actuel
@@ -129,3 +131,59 @@ Nivo : Conçue pour React et construite sur D3, elle fournit des composants grap
 Vega / Vega-Lite : Ces librairies permettent de définir des visualisations sous forme de spécifications JSON. Vega-Lite est particulièrement puissante pour générer des visualisations D3 complexes de manière déclarative (similaire à une macro). (react-jsonschema-form)
 
 https://www.highcharts.com/?gad_source=1&gad_campaignid=22994297277&lsgclid=CjwKCAjwyMnNBhBNEiwA-Kcgu7e-6EIZvF9l5K51pxOEBYBonIGhfIObbUXF58-7cSfnguGEOYF-iBoCRhIQAvD_BwE
+
+## poubelle
+
+### notes V3
+
+# Présentation
+
+1. Écran différence
+
+   - Nombre de connexion habituelle
+   - Nombre d'echec de mot de passe attendu en moyenne
+
+1. Évolution du nombre d'alerte en fonction du temps pour différentes sources
+
+   - modifier le temps (axe des x)
+   - bouton pour afficher ou non courbe
+   - événements interne
+
+1. mode clair / mode sombre
+
+1. Une page pour les éléments récurrent
+
+   - stats sur plusieurs années / mois / jours
+   - daté (noel) ou non (sorti d'un nouveau jeu vidéo)
+   - lesquels sont normaux (pas de tentatives d'intrusion)
+     lesquels sont suspects (tentatives d'intrusion)
+
+1. Quand l'utilisateur sélectionne une zone / un événement spécifique à analyser
+   Activation automatique des couleurs en fonction de la gravité des données - vert si normal (même si les données sont troublantes ici c'est ok) - élements qui font dire que c'est normal - rouge si anormal (même si ailleurs parfaitement acceptable ici pas ok) - éléments qui font dire que c'est inquiétant
+
+1. Sur la même page on peut superposer des événements récurrents identiques pour
+   voir son évolution dans le temps
+
+1. Une courbe différence à la normale, pour un événement donné
+
+1. Carte du monde avec origine des adresses IP normales
+   origine des adresses ip souvent anormales
+   origine des adresses ip très rares (donc potentiellement anormales)
+
+1. Faire un diagramme des répartitions des origines des parefeux
+
+1. Page d'entraînement où on lui propose plusieurs boutons d'action et il doit choisir le plus pertinenet pour tel ou tel alerte
+
+# Améliorations
+
+mettre des petites phrases, 2 phrases max
+faire de la cohérence entre les images
+mise en page / passer en anglais
+
+1. Répartition des protocoles quand on clique sur une source
+
+Poser un nombre de questions une à la fois avec sa propre expérience par
+l'entreprise (il connait de toute façon pas) fin : prend chaque réponse et
+compare = cf le tableau sur teams : bleu idem ; rouge c'est pire ici ; vert
+c'est mieux changer le tableau que j'ai sous forme de questions (supprimer
+entreprise)

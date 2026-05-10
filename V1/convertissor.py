@@ -4,20 +4,19 @@ from scapy.all import rdpcap
 from datetime import datetime
 import argparse
 
-parser = argparse.ArgumentParser(description="Convertit un pcap / pcapng en csv avec le bon format des données")
+parser = argparse.ArgumentParser(description="Convertit un pcap / pcapng en csv avec le format des données qui nous intéresse")
 
 parser.add_argument(
     "--input",
     type=str,
-    default="realistic_traffic_2026.pcap",   # valeur par défaut
-    help="Fichier d'entrée (défaut: realistic_traffic_2026.pcap)"
+    help="Fichier d'entrée"
 )
 
 parser.add_argument(
     "--output",
     type=str,
-    default="random_data_total.csv",   # valeur par défaut
-    help="Fichier d'entrée (défaut: random_data_total.csv)"
+    default="data/converted_data.csv",   # valeur par défaut
+    help="Fichier de sortie (défaut: data/converted_data.csv)"
 )
 
 args = parser.parse_args()
@@ -50,7 +49,7 @@ result = (
     .reset_index(name="number")
 )
 
-# ajouter col sum
+# ajouter column total
 total = 0
 date = result.iloc[0]["date"]
 for i in result.itertuples(index=False):

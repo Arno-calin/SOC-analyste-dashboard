@@ -8,6 +8,8 @@ ENV/
 .python-version
 __pycache__/
 
-# JS
+# csv / pcap
 data/
+
+# JS
 node_modules/
