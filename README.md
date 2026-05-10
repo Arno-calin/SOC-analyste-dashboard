@@ -8,7 +8,7 @@ L'extension [Prettier](https://marketplace.visualstudio.com/items?itemName=esben
 
 Ce projet a aboutit à la réalisation d'un [diaporama](https://github.com/Arno-calin/SOC-analyste-dashboard/blob/master/V3/Dashboard%20presentation.pdf) résumant les idées qui ont été trouvées.
 
-Les différentes versions, listées ci-dessous, représentent l'évolution du projet et des pistes d'améliorations potentielles.
+Les différentes versions, listées ci-dessous, représentent des pistes d'améliorations potentielles.
 
 ## Le projet
 
@@ -59,11 +59,7 @@ Les données sont stockés dans un dossier data qu'il faut créer et ne pas envo
 
 ### V2
 
-#### Installation
-
-commande pour récupérer node_module (démarrer un serveur vite)
-
-#### Technologies
+Cette version a du code inutile. Je l'ai gardé au cas où ils puissent servir.
 
 ### V3
 
